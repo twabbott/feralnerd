@@ -5,9 +5,9 @@ const PostItem = ({ post }) => {
   return (
     <div className={styles.postItem}>
       <h3>
-        <Link href={post.link}>{post.data.title}</Link>
+        <Link href={post.link}>{post.title}</Link>
       </h3>
-      <p>{post.data.excerpt}</p>
+      <p>{post.excerpt}</p>
       <Link href={post.link}>Read more</Link>
     </div>
   );

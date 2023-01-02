@@ -2,7 +2,7 @@ import Link from 'next/link';
 import AboutMe from '../components/AboutMe';
 import Meta from '../components/Meta';
 import PostItem from '../components/PostItem';
-import { getPosts } from '../scripts/utils';
+import { importAll } from '../scripts/utils';
 import styles from '../styles/Home.module.css';
 
 const Home = ({ posts }) => {
@@ -23,12 +23,13 @@ const Home = ({ posts }) => {
 };
 export default Home;
 
-export const getStaticProps = () => {
-  const posts = getPosts();
+export async function getStaticProps() {
+  const posts = await importAll();
+  console.log('posts', posts);
 
   return {
     props: {
       posts,
     },
   };
-};
+}
