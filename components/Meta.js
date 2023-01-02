@@ -1,14 +1,16 @@
-import Head from "next/head";
+import Head from 'next/head';
 
-const Meta = ({ title }) => {
+const Meta = ({ title, keywords, excerpt }) => {
   return (
-    <Head>
-      <title>{title}</title>
-      <meta
-        name="keywords"
-        content="react native, blog, John Doe, tutorial, react navigation"
-      />
-    </Head>
+    <>
+      <Head>
+        <title>{title} - Blog Rocket</title>
+        {keywords && <meta name="keywords" content={keywords} />}
+      </Head>
+
+      <h1>{title}</h1>
+      {excerpt && <p>{excerpt}</p>}
+    </>
   );
 };
 
@@ -16,5 +18,5 @@ export default Meta;
 
 // let's set a default title
 Meta.defaultProps = {
-  title: "PressBlog - Your one stop blog for everything React Native",
+  title: 'Title not set',
 };
