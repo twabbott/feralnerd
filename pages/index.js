@@ -3,7 +3,6 @@ import Head from 'next/head';
 import AboutMe from '../components/AboutMe';
 import PostSummary from '../components/PostSummary';
 import { importAll } from '../scripts/utils';
-import styles from '../styles/Home.module.css';
 
 const Home = ({ posts }) => {
   return (
@@ -14,8 +13,8 @@ const Home = ({ posts }) => {
       <AboutMe />
       <Link href="/about">More about me</Link>
 
-      <div className={styles.articleList}>
-        <p className={styles.desc}>Newly Published</p>
+      <div>
+        <p>Newly Published</p>
         {posts.map((post) => (
           <PostSummary key={post.slug} {...post} />
         ))}
