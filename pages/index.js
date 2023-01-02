@@ -1,6 +1,6 @@
 import Link from 'next/link';
+import Head from 'next/head';
 import AboutMe from '../components/AboutMe';
-import Meta from '../components/Meta';
 import PostSummary from '../components/PostSummary';
 import { importAll } from '../scripts/utils';
 import styles from '../styles/Home.module.css';
@@ -8,6 +8,9 @@ import styles from '../styles/Home.module.css';
 const Home = ({ posts }) => {
   return (
     <>
+      <Head>
+        <title>Blog Rocket</title>
+      </Head>
       <AboutMe />
       <Link href="/about">More about me</Link>
 

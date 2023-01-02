@@ -1,6 +1,6 @@
 import Head from 'next/head';
 
-const Meta = ({ title, keywords, excerpt }) => {
+const Frontmatter = ({ title, keywords, excerpt, date }) => {
   return (
     <>
       <Head>
@@ -9,14 +9,16 @@ const Meta = ({ title, keywords, excerpt }) => {
       </Head>
 
       <h1>{title}</h1>
+      <p>
+        <em>{date}</em>
+      </p>
       {excerpt && <p>{excerpt}</p>}
     </>
   );
 };
 
-export default Meta;
-
-// let's set a default title
-Meta.defaultProps = {
-  title: 'Title not set',
+Frontmatter.defaultProps = {
+  title: '[Title not set]',
 };
+
+export default Frontmatter;
