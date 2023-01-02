@@ -1,0 +1,5 @@
+# Ignore the following
+*.mdx
+.next
+build
+package-lock.json
