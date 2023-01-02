@@ -23,12 +23,23 @@ export async function importAll() {
 
   const promises = files.map((filename) => context(filename));
   const results = await Promise.allSettled(promises);
-  const frontmatter = results.map((result, i) => {
-    return {
-      ...getFileInfo(files[i]),
-      ...result.value.frontmatter,
-    };
-  });
+  const frontmatter = results
+    .map((result, i) => {
+      return {
+        ...getFileInfo(files[i]),
+        ...result.value.frontmatter,
+      };
+    })
+    .sort((a, b) => {
+      if (a.date < b.date) {
+        return -1;
+      }
+      if (a.date > b.date) {
+        return 1;
+      }
+      return 0;
+    })
+    .reverse();
 
   return frontmatter;
 }
