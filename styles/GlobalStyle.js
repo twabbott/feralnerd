@@ -14,7 +14,7 @@ body {
   font-size: 13pt;
   font-weight: 333;
   color: rgb(169,173,193);
-  background-color: rgb(31, 32, 40);
+  background-color: ${(props) => props.theme.colors.bgPrimary};
 }
 
 p {
@@ -23,7 +23,7 @@ p {
 
 h1, h2, h3, h4 {
   margin: 1.5rem 0 0 0;
-  color: #dbff99;
+  color: ${(props) => props.theme.colors.headings};
   font-weight: 500;
 }
 
