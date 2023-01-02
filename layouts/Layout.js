@@ -1,9 +1,9 @@
-import Header from "../components/Header";
+import PageHeader from '@/components/PageHeader';
 
 const Layout = ({ children }) => {
   return (
     <div>
-      <Header />
+      <PageHeader />
       <main className="max-width-container main">{children}</main>
     </div>
   );
