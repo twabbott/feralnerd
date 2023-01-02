@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Date from './Date';
 
 const Frontmatter = ({ title, keywords, excerpt, date }) => {
   return (
@@ -10,7 +11,7 @@ const Frontmatter = ({ title, keywords, excerpt, date }) => {
 
       <h1>{title}</h1>
       <p>
-        <em>{date}</em>
+        <Date date={date} />
       </p>
       {excerpt && <p>{excerpt}</p>}
     </>
