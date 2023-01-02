@@ -1,24 +1,62 @@
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
 
-export const getPosts = (pageIndex) => {
-  const dirFiles = fs.readdirSync(path.join(process.cwd(), "pages", "posts"), {
-    withFileTypes: true,
-  });
+function getAllMarkdownFiles(startPath) {
+  const contents = [];
 
-  const posts = dirFiles
-    .map((file) => {
-      if (!file.name.endsWith(".mdx")) return;
+  function helper(folderName) {
+    const list = fs.readdirSync(folderName, {
+      withFileTypes: true,
+    });
 
-      const fileContent = fs.readFileSync(
-        path.join(process.cwd(), "pages", "posts", file.name),
-        "utf-8"
-      );
+    for (const entry of list) {
+      const fullname = path.join(folderName, entry.name);
+      if (entry.isDirectory()) {
+        helper(fullname);
+      } else if (fullname.endsWith('.mdx')) {
+        contents.push(fullname);
+      }
+    }
+  }
+
+  helper(startPath);
+  console.log('MDX files found', contents);
+
+  return contents;
+}
+
+function getSlug(pathname) {
+  const parts = pathname.split(path.sep);
+
+  return parts[parts.length - 2];
+}
+
+function getLink(pathname) {
+  const parts = pathname.split(path.sep);
+
+  return parts[parts.length - 2];
+}
+
+export const getPosts = () => {
+  const startDir = path.join(process.cwd(), 'pages', 'posts');
+  const mdxFiles = getAllMarkdownFiles(startDir);
+
+  const posts = mdxFiles
+    .map((filename) => {
+      if (!filename.endsWith('index.mdx')) {
+        console.warn(`Found MDX file that is not named "index.mdx"`, filename);
+        return;
+      }
+
+      const fileContent = fs.readFileSync(filename, 'utf-8');
       const { data, content } = matter(fileContent);
 
-      const slug = file.name.replace(/.mdx$/, "");
-      return { data, content, slug };
+      const slug = getSlug(filename);
+      let link = './' + filename.substr(startDir.length - 5);
+      link = link.substr(0, link.length - 10);
+      console.log('link', link);
+      return { data, content, slug, link };
     })
     .filter((post) => post);
 
@@ -35,17 +73,4 @@ const createMultiplePosts = (posts) => {
   });
 
   return multiplePosts;
-};
-
-const filterPostsByPageIndex = (posts, pageIndex) => {
-  const postPerPage = 5;
-  // get the total posts from page 1 to current page
-  const totalPagePosts = +pageIndex * postPerPage;
-
-  // get the total posts from page 1 to previous page
-  const prevPagePosts = totalPagePosts - postPerPage;
-
-  return posts.filter(
-    (post, index) => index < totalPagePosts && index >= prevPagePosts
-  );
 };

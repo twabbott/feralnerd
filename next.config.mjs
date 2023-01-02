@@ -1,5 +1,5 @@
-import remarkFrontmatter from "remark-frontmatter";
-import rehypeHighlight from "rehype-highlight";
+import remarkFrontmatter from 'remark-frontmatter';
+import rehypeHighlight from 'rehype-highlight';
 
 export default {
   webpack: (config, options) => {
@@ -8,9 +8,9 @@ export default {
       use: [
         options.defaultLoaders.babel,
         {
-          loader: "@mdx-js/loader",
+          loader: '@mdx-js/loader',
           options: {
-            providerImportSource: "@mdx-js/react",
+            providerImportSource: '@mdx-js/react',
             remarkPlugins: [remarkFrontmatter],
             rehypePlugins: [rehypeHighlight],
           },
@@ -21,7 +21,11 @@ export default {
     return config;
   },
   reactStrictMode: true,
-  pageExtensions: ["js", "jsx", "md", "mdx"],
+  pageExtensions: ['js', 'jsx', 'md', 'mdx'],
+  compiler: {
+    // Enables the styled-components SWC transform
+    styledComponents: true,
+  },
   // images: {
   //   loader: "imgix",
   //   path: "https://images.unsplash.com/",

@@ -1,9 +1,9 @@
-import Link from "next/link";
-import AboutMe from "../components/AboutMe";
-import Meta from "../components/Meta";
-import PostItem from "../components/PostItem";
-import { getPosts } from "../scripts/utils";
-import styles from "../styles/Home.module.css";
+import Link from 'next/link';
+import AboutMe from '../components/AboutMe';
+import Meta from '../components/Meta';
+import PostItem from '../components/PostItem';
+import { getPosts } from '../scripts/utils';
+import styles from '../styles/Home.module.css';
 
 const Home = ({ posts }) => {
   return (
@@ -24,7 +24,7 @@ const Home = ({ posts }) => {
 export default Home;
 
 export const getStaticProps = () => {
-  const posts = getPosts(1); // the argument has no effect yet
+  const posts = getPosts();
 
   return {
     props: {

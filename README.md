@@ -5,3 +5,9 @@ This is a sample blog app using instructions from [this article](https://blog.lo
 3. `gray-matter` we will use Front Matter in this blog, and gray-matter will parse it into an object of metadata
 4. `remark-frontmatter` MDX does not provide support for Front Matter, so we need to use this package to ignore Front Matter when we view our MDX files as pages in the browser
 5. `rehype-highlight` allows us to use highlight.js to apply syntax highlighting to any code block
+
+# Stuff to do
+
+Add SEO. There's a library called [next-seo](https://www.npmjs.com/package/next-seo)
+
+See if you can add better syntax highlighting with [react-syntax-highlighter](https://github.com/react-syntax-highlighter/react-syntax-highlighter)
