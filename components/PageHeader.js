@@ -6,6 +6,7 @@ import { responsiveContainer } from '../styles/mixins';
 
 const Container = styled.header`
   background-color: ${(props) => props.theme.colors.bgSecondary};
+  margin-bottom: 1em;
 
   & > nav {
     ${responsiveContainer}
@@ -36,7 +37,7 @@ const Container = styled.header`
     margin: 0 0;
 
     & a {
-      color: ${(props) => props.theme.colors.headings};
+      color: ${(props) => props.theme.colors.menu};
       margin: 0 0;
       padding: .4em 1em;
       display: block;
@@ -44,7 +45,7 @@ const Container = styled.header`
     }
 
     & a:hover {
-      color: pink;
+      color: ${(props) => props.theme.colors.menuHighlight};
       background-color: ${(props) => props.theme.colors.bgSecondaryHighlight};
       border-radius: 10px 10px 0 0;
       border-bottom: 3px solid ${(props) => props.theme.colors.headings};

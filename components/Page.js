@@ -4,6 +4,8 @@ import { responsiveContainer } from '../styles/mixins';
 
 const Article = styled.article`
   ${responsiveContainer}
+
+  min-height: 100vh;
 `;
 
 const Page = ({ title, children }) => {

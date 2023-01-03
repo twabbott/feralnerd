@@ -6,7 +6,8 @@ const theme = {
     bgSecondaryHighlight: 'rgb(46, 48, 65)',
     headings: '#ff9933',
     logo: 'white',
-    menu: 'yellow',
+    menu: 'rgb(196, 196, 64)',
+    menuHighlight: 'rgb(196, 196, 196)',
   },
 };
 

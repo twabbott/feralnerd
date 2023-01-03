@@ -6,7 +6,9 @@ const Container = styled.div`
   & img.avatar {
     max-width: 100%;
     height: auto;
-    border-radius: 50%;
+    border-radius: 5px;
+    display: block;
+    box-shadow: 2px 2px 10px rgb(12, 13, 19);
   }
 `;
 
