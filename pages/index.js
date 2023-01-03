@@ -10,11 +10,8 @@ const Home = ({ posts }) => {
       <Head>
         <title>Blog Rocket</title>
       </Head>
-      <AboutMe />
-      <Link href="/about">More about me</Link>
 
       <div>
-        <p>Newly Published</p>
         {posts.map((post) => (
           <PostSummary key={post.slug} {...post} />
         ))}

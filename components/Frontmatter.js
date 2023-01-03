@@ -1,18 +1,11 @@
 import Head from 'next/head';
 import styled from 'styled-components';
+import { responsiveContainer } from '../styles/mixins';
 
 import Date from './Date';
 
 const Article = styled.article`
-  margin: 0 24px;
-  max-width: 1000px;
-
-  @media screen and (min-width: 1000px) {
-    & {
-      margin: 24px auto;
-      max-width: 952px;
-    }
-  }
+  ${responsiveContainer}
 
   & .title {
     font-size: 2.5rem;
