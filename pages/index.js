@@ -1,8 +1,13 @@
-import Link from 'next/link';
 import Head from 'next/head';
-import AboutMe from '../components/AboutMe';
+import styled from 'styled-components';
+
 import PostSummary from '../components/PostSummary';
 import { importAll } from '../scripts/utils';
+import { responsiveContainer } from '../styles/mixins';
+
+const Container = styled.div`
+  ${responsiveContainer}
+`;
 
 const Home = ({ posts }) => {
   return (
@@ -11,11 +16,11 @@ const Home = ({ posts }) => {
         <title>Blog Rocket</title>
       </Head>
 
-      <div>
+      <Container>
         {posts.map((post) => (
           <PostSummary key={post.slug} {...post} />
         ))}
-      </div>
+      </Container>
     </>
   );
 };

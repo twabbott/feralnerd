@@ -1,11 +1,29 @@
 import Head from 'next/head';
-import AboutMe from "@/components/AboutMe.js";
+import Image from 'next/image';
+
+import Avatar from "@/components/Avatar";
+import Page from "@/components/Page";
 
 <Head>
     <title>About Me - Blog Rocket</title>
 </Head>
 
-<AboutMe />
+
+<Avatar
+    src="/images/tom.png"
+    alt="john doe avatar"
+    width={150}
+    height={150}
+    className="avatar"
+/>
+
+export default ({children}) => (<Page title="About John Doe">{children}</Page>);
+
+# About Me
+
+Hey, I am <strong>John Doe</strong>. I love coding. Lorem ipsum dolor
+sit, amet consectetur adipisicing elit. Reiciendis commodi numquam
+incidunt blanditiis quibusdam atque natus inventore sunt autem iusto.
 
 #### Let's dive into more of me
 
