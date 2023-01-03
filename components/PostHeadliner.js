@@ -5,14 +5,14 @@ import styled from 'styled-components';
 import Date from './Date';
 
 const Container = styled.article`
-  display: flex;
-  margin: 2em 0;
+  margin: 1em 0;
+  width: ${(props) => (props.large ? '100%' : '48%')};
 
   .photo {
     position: relative;
-    width: 320px;
-    height:180px;
-    margin-right: 1em;
+    width: 100%;
+    height: ${(props) => (props.large ? '56.25vw' : '28vw')};
+    max-height: 423px;
 
     & img {
       object-fit: cover;
@@ -27,7 +27,7 @@ const Container = styled.article`
   }
 
   & h1 {
-    margin 0 0;
+    margin .25em 0 0 0;
 
     & a {
       color: ${(props) => props.theme.colors.headings};
@@ -35,24 +35,30 @@ const Container = styled.article`
   }
 `;
 
-const PostSummary = ({ title, date, excerpt, link, image, imageAlt }) => {
+const PostSummary = ({
+  title,
+  date,
+  excerpt,
+  link,
+  image,
+  imageAlt,
+  large,
+}) => {
   return (
-    <Container>
+    <Container large={large}>
       <section className="photo">
         <Image src={image} alt={imageAlt} fill priority />
       </section>
-      <section className="content">
-        <h1>
-          <Link href={link}>{title}</Link>
-        </h1>
-        {excerpt && <p>{excerpt}</p>}
-        <p>
-          <Date date={date} />
-        </p>
-        <p>
-          <Link href={link}>Read more</Link>
-        </p>
-      </section>
+      <h1>
+        <Link href={link}>{title}</Link>
+      </h1>
+      {excerpt && <p>{excerpt}</p>}
+      <p>
+        <Date date={date} />
+      </p>
+      <p>
+        <Link href={link}>Read more</Link>
+      </p>
     </Container>
   );
 };
