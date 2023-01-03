@@ -4,7 +4,7 @@ export const responsiveContainer = `
 
     @media screen and (min-width: 800px) {
         & {
-            margin: 24px auto;
+            margin: 0px auto;
             max-width: 752px;
         }
     }
