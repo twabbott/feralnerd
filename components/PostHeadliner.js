@@ -3,6 +3,7 @@ import Image from 'next/image';
 import styled from 'styled-components';
 
 import Date from './Date';
+import ReadingTime from './ReadingTime';
 
 const Container = styled.article`
   margin: 1em 0;
@@ -33,6 +34,10 @@ const Container = styled.article`
       color: ${(props) => props.theme.colors.headings};
     }
   }
+
+  & p {
+    margin .25em 0;
+  }
 `;
 
 const PostSummary = ({
@@ -43,11 +48,14 @@ const PostSummary = ({
   image,
   imageAlt,
   large,
+  readingTime,
 }) => {
   return (
     <Container large={large}>
       <section className="photo">
-        <Image src={image} alt={imageAlt} fill priority />
+        <Link href={link}>
+          <Image src={image} alt={imageAlt} fill priority />
+        </Link>
       </section>
       <h1>
         <Link href={link}>{title}</Link>
@@ -55,6 +63,7 @@ const PostSummary = ({
       {excerpt && <p>{excerpt}</p>}
       <p>
         <Date date={date} />
+        <ReadingTime minutes={readingTime} />
       </p>
       <p>
         <Link href={link}>Read more</Link>

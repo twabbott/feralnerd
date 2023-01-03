@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { responsiveContainer } from '../styles/mixins';
 
 import Date from './Date';
+import ReadingTime from './ReadingTime';
 
 const Article = styled.article`
   ${responsiveContainer}
@@ -55,7 +56,6 @@ const Frontmatter = ({
         {excerpt && <p>{excerpt}</p>}
         {image && (
           <div className="hero">
-            {' '}
             <Image src={image} alt={imageAlt} fill priority />
           </div>
         )}
