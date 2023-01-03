@@ -6,7 +6,7 @@ export const frontmatter = {
   excerpt: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea deserunt ab maiores eligendi nemo, ipsa, pariatur"
 }
 
-<Frontmatter {...frontmatter} />
+export default ({children}) => (<Frontmatter {...frontmatter}>{children}</Frontmatter>);
 
 React Native is a lovely language
 

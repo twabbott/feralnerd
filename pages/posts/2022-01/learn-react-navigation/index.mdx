@@ -7,7 +7,7 @@ export const frontmatter = {
     keywords: "lorem, ipsum, dolor, sit amit"
 };
 
-<Frontmatter {...frontmatter} />
+export default ({children}) => (<Frontmatter {...frontmatter}>{children}</Frontmatter>);
 
 React Navigation is one of the best things that happened to [**React Native**](https://cnn.com)
 
