@@ -1,9 +1,13 @@
 import Frontmatter from "@/components/Frontmatter.js";
 
+import image from "./hero.jpg";
+
 export const frontmatter = {
-  title: "What is React Native?",
-  date: "2022-01-31",
-  excerpt: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea deserunt ab maiores eligendi nemo, ipsa, pariatur"
+    title: "What is React Native?",
+    date: "2022-01-31",
+    excerpt: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea deserunt ab maiores eligendi nemo, ipsa, pariatur",
+    image,
+    imageAlt: "Lorem ipsum",
 }
 
 export default ({children}) => (<Frontmatter {...frontmatter}>{children}</Frontmatter>);

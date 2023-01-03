@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Image from 'next/image';
 import styled from 'styled-components';
 import { responsiveContainer } from '../styles/mixins';
 
@@ -16,9 +17,28 @@ const Article = styled.article`
   & .info {
     margin-bottom: 1rem;
   }
+
+  & .hero {
+    position: relative;
+    width: 100%;
+    height: 56.25vw;
+    max-height: 423px;
+
+    & img {
+      object-fit: cover;
+    }
+  }
 `;
 
-const Frontmatter = ({ title, keywords, excerpt, date, children }) => {
+const Frontmatter = ({
+  title,
+  keywords,
+  excerpt,
+  date,
+  children,
+  image,
+  imageAlt,
+}) => {
   const titleText = `${title} - Blog Rocket`;
   return (
     <>
@@ -33,6 +53,12 @@ const Frontmatter = ({ title, keywords, excerpt, date, children }) => {
           <Date date={date} />
         </p>
         {excerpt && <p>{excerpt}</p>}
+        {image && (
+          <div className="hero">
+            {' '}
+            <Image src={image} alt={imageAlt} fill priority />
+          </div>
+        )}
         {children}
       </Article>
     </>
@@ -41,6 +67,7 @@ const Frontmatter = ({ title, keywords, excerpt, date, children }) => {
 
 Frontmatter.defaultProps = {
   title: '[Title not set]',
+  imageAlt: 'Hero image',
 };
 
 export default Frontmatter;
