@@ -2,13 +2,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styled from 'styled-components';
 
-import { siteMap } from '../scripts/siteMap';
+import SocialApp from '@/components/SocialApp';
+
+import { siteMap, SocialApps } from '../scripts/siteMap';
 import portrait from '../public/images/avatar-photo.png';
-import Facebook from '../public/images/social/facebook';
-import LinkedIn from '../public/images/social/linkedin';
-import Github from '../public/images/social/github.js';
-import Instagram from '../public/images/social/instagram.js';
-import Twitter from '../public/images/social/twitter.js';
 import { responsiveContainer } from '../styles/mixins';
 
 const Container = styled.footer`
@@ -56,6 +53,8 @@ const Container = styled.footer`
     }
 
     .social {
+      display: flex;
+      justify-content: flex-start;
       margin-top: 1rem;
     }
 
@@ -63,13 +62,13 @@ const Container = styled.footer`
       margin-right: 0.5rem;
     }
 
-    & a {
+    & .siteMap a {
       color: ${(props) => props.theme.colors.menuHighlight};
       padding: 0.2em 1em;
       display: block;
     }
 
-    & a:hover {
+    & .siteMap a:hover {
       background-color: ${(props) => props.theme.colors.bgSecondaryHighlight};
     }
   }
@@ -91,16 +90,14 @@ export default function PageFooter() {
         <div>
           <h2>Site Map</h2>
           {siteMap.menu.map((item) => (
-            <div key={item.id}>
+            <div key={item.id} className="siteMap">
               <Link href={item.link}>{item.name}</Link>
             </div>
           ))}
           <div className="social">
-            <LinkedIn width={32} height={32} color="rgb(169,173,193)" />
-            <Facebook width={32} height={32} color="rgb(169,173,193)" />
-            <Github width={32} height={32} color="rgb(169,173,193)" />
-            <Instagram width={32} height={32} color="rgb(169,173,193)" />
-            <Twitter width={32} height={32} color="rgb(169,173,193)" />
+            {siteMap.social.map((item) => (
+              <SocialApp {...item} />
+            ))}
           </div>
           <p>&copy; 2022, All Rights Reserved</p>
         </div>

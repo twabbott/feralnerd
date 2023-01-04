@@ -15,10 +15,6 @@ See if you can add better syntax highlighting with [react-syntax-highlighter](ht
 
 ## bugs:
 
-- Need image credits
-- footer
-  - social icons need to be turned into links
-    - make these depend on the siteMap. If you have a link to your profile then the icon shows up, otherwise the icon is hidden.
 - move frontmatter into a global context, so you can just pull it down based on the slug from the current url. Then you can fix these two errors:
   - Reading time isn't visible on the posts, because it's not part of the frontmatter. It's calculated at load-time.
     - maybe have the page component store this data in a context, so it can be shared and looked up by any component.
