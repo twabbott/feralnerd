@@ -9,16 +9,6 @@ import ReadingTime from './ReadingTime';
 const Article = styled.article`
   ${responsiveContainer}
 
-  & .title {
-    font-size: 2.5rem;
-    font-weight: 400;
-    margin-bottom: 1rem;
-  }
-
-  & .info {
-    margin-bottom: 1rem;
-  }
-
   & .hero {
     position: relative;
     width: 100%;
@@ -28,6 +18,11 @@ const Article = styled.article`
     & img {
       object-fit: cover;
     }
+  }
+
+  & .imageCredit {
+    text-align: center;
+    font-size: 0.8em;
   }
 `;
 
@@ -39,6 +34,7 @@ const Frontmatter = ({
   children,
   image,
   imageAlt,
+  imageCredit,
 }) => {
   const titleText = `${title} - Blog Rocket`;
   return (
@@ -55,9 +51,17 @@ const Frontmatter = ({
         </p>
         {excerpt && <p>{excerpt}</p>}
         {image && (
-          <div className="hero">
-            <Image src={image} alt={imageAlt} fill priority />
-          </div>
+          <>
+            <div className="hero">
+              <Image src={image} alt={imageAlt} fill priority />
+            </div>
+            {imageCredit && (
+              <div
+                className="imageCredit"
+                dangerouslySetInnerHTML={{ __html: imageCredit }}
+              />
+            )}
+          </>
         )}
         {children}
       </Article>
