@@ -3,8 +3,9 @@ import styled from 'styled-components';
 
 import PostSummary from '@/components/PostSummary';
 import PostHeadliner from '@/components/PostHeadliner';
-import { importAll } from '../scripts/utils';
+import { buildSiteInfoJson } from '../scripts/buildSiteInfo';
 import { responsiveContainer } from '../styles/mixins';
+import { useAllPosts } from '@/components/SiteInfoContext';
 
 const Container = styled.div`
   ${responsiveContainer}
@@ -17,9 +18,8 @@ const Container = styled.div`
   }
 `;
 
-const Home = ({ posts }) => {
-  const [first, second, third] = posts;
-
+function Home() {
+  const [first, second, third, ...rest] = useAllPosts();
   return (
     <>
       <Head>
@@ -39,25 +39,22 @@ const Home = ({ posts }) => {
           {third && <PostHeadliner {...third} />}
         </div>
         <>
-          {posts
-            .filter((_, index) => index >= 3)
-            .map((post) => (
-              <PostSummary key={post.slug} {...post} />
-            ))}
+          {rest.map((post) => (
+            <PostSummary key={post.slug} {...post} />
+          ))}
         </>
       </Container>
     </>
   );
-};
+}
 export default Home;
 
 export async function getStaticProps() {
-  const posts = await importAll();
+  // 🚩 Need this here, because this is how we build siteInfo.json
+  const posts = await buildSiteInfoJson();
   console.log('posts', posts);
 
   return {
-    props: {
-      posts,
-    },
+    props: {},
   };
 }

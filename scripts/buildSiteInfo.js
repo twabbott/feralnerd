@@ -16,7 +16,7 @@ function getFileInfo(pathname) {
   return { filename: pathname, link, slug, readingTime: getReadTime(pathname) };
 }
 
-export async function importAll() {
+export async function buildSiteInfoJson() {
   const dotSlash = '.' + path.sep;
   const context = require.context('../pages/posts/', true, /\.mdx$/);
   const files = context
@@ -32,7 +32,6 @@ export async function importAll() {
         ...result.value.frontmatter,
       };
     })
-    .filter((post) => post.isPublished)
     .sort((a, b) => {
       if (a.date < b.date) {
         return -1;

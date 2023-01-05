@@ -1,4 +1,4 @@
-import { getPosts } from "../../scripts/utils";
+import { getPosts } from '../../scripts/buildSiteInfo';
 
 export default function handler(req, res) {
   const { page } = req.query;
