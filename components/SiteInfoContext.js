@@ -42,12 +42,17 @@ export default SiteInfoContext;
 
 export function useFrontmatter() {
   const router = useRouter();
-  const siteInfoCtx = useContext(SiteInfoContext);
+  const { posts } = useContext(SiteInfoContext);
 
   const slug = router.asPath.substring(router.asPath.lastIndexOf('/') + 1);
-  const frontmatter = siteInfoCtx.posts.find((item) => item.slug === slug);
+  const frontmatter = posts.find((item) => item.slug === slug);
 
   console.log('frontmatter', frontmatter);
 
   return frontmatter;
+}
+
+export function useAllPosts() {
+  const { posts } = useContext(SiteInfoContext);
+  return posts.filter((post) => post.isPublished);
 }
