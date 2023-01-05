@@ -15,8 +15,11 @@ See if you can add better syntax highlighting with [react-syntax-highlighter](ht
 
 ## bugs:
 
-- Add a 404 page.
-  - show url they were trying to get to
-  - I'm sorry, that page doesn't exist.
-  - Take me back button
-  - Suggest some other articles
+- Come up with a way to lazy-load additional posts, and put it at the bottom of the front page so that the user can see other posts.
+  - The loader should say something like "Hang on, while we find more..."
+  - Every 10 posts or so, add a banner with a button that says: "Looking for an older post? Check our archive!". Clicking the button takes you to an archive page
+- Archive page
+  Science Alert has [an AWESOME archive page](https://www.sciencealert.com/archive)!! Do something like that!
+- Search bar
+  - Do searches on the front-matter. is there a way we can do flex-search on the front-matter?
+  - If there are no results, have a message that says "Hmmm, not sure we have that."

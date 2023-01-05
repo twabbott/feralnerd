@@ -27,7 +27,7 @@ const Container = styled.article`
     width: 100%;
   }
 
-  & h1 {
+  & h3 {
     margin 0 0;
 
     & a {
@@ -57,9 +57,9 @@ const PostSummary = ({
         </Link>
       </section>
       <section className="content">
-        <h1>
+        <h3>
           <Link href={link}>{title}</Link>
-        </h1>
+        </h3>
         {excerpt && <p>{excerpt}</p>}
         <p>
           <Date date={date} />

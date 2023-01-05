@@ -14,13 +14,13 @@ const Line = styled.hr`
   height: 5px;
 `;
 
-export default function SuggestedReading() {
-  const { slug } = useFrontmatter();
+export default function SuggestedReading({ maxCount = 5 }) {
+  const frontmatter = useFrontmatter();
   const { posts } = useContext(SiteInfoContext);
 
   const suggestedPosts = posts
-    .filter((post) => post.slug !== slug)
-    .filter((_, index) => index < 5);
+    .filter((post) => post.slug !== frontmatter?.slug)
+    .filter((_, index) => index < maxCount);
 
   return (
     <>
