@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styled from 'styled-components';
@@ -6,7 +5,7 @@ import styled from 'styled-components';
 import Date from './Date';
 import { responsiveContainer } from '../styles/mixins';
 import ReadingTime from './ReadingTime';
-import SiteInfoContext, { useFrontmatter } from './SiteInfoContext';
+import { useFrontmatter } from './SiteInfoContext';
 
 const Article = styled.article`
   ${responsiveContainer}
@@ -28,9 +27,20 @@ const Article = styled.article`
   }
 `;
 
+const NotPublished = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 3em;
+  background-color: maroon;
+  color: yellow;
+  font-weight: bold;
+`;
+
 const Frontmatter = ({ children }) => {
-  const siteInfo = useContext(SiteInfoContext);
   const {
+    isPublished,
     title,
     keywords,
     excerpt,
@@ -48,6 +58,10 @@ const Frontmatter = ({ children }) => {
         <title>{titleText}</title>
         {keywords && <meta name="keywords" content={keywords} />}
       </Head>
+
+      {!isPublished && (
+        <NotPublished>This post has not yet been published.</NotPublished>
+      )}
 
       <Article>
         <h1>{title}</h1>
@@ -70,7 +84,6 @@ const Frontmatter = ({ children }) => {
           </>
         )}
         {children}
-        <p>There are {siteInfo.posts.length} other great posts to read!</p>
       </Article>
     </>
   );
