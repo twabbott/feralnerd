@@ -66,7 +66,7 @@ const PostSummary = ({
           <ReadingTime minutes={readingTime} />
         </p>
         <p>
-          <Link href={link}>Read more</Link>
+          <Link href={link}>Read more &rarr;</Link>
         </p>
       </section>
     </Container>

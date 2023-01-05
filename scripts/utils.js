@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 
 import getReadTime from './readTime';
@@ -21,7 +22,6 @@ export async function importAll() {
   const files = context
     .keys()
     .filter((filename) => filename.startsWith(dotSlash));
-  console.log('all filenames', files);
 
   const promises = files.map((filename) => context(filename));
   const results = await Promise.allSettled(promises);
@@ -43,6 +43,11 @@ export async function importAll() {
       return 0;
     })
     .reverse();
+
+  const json = JSON.stringify({ posts: frontmatter }, null, '  ');
+  fs.writeFileSync(path.join(process.cwd(), 'scripts', 'siteInfo.json'), json, {
+    encoding: 'utf-8',
+  });
 
   return frontmatter;
 }

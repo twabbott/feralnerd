@@ -37,12 +37,12 @@ export default function getReadTime(pathname) {
   const filename = path.join(process.cwd(), 'pages', 'posts', pathname);
 
   let fileContents = fs.readFileSync(filename, 'utf8');
-  const bannerPos = fileContents.indexOf(START_BANNER);
+  const bannerPos = fileContents.indexOf('export default');
   if (bannerPos < 0) {
     return 0;
   }
 
-  fileContents = fileContents.substring(bannerPos + START_BANNER.length);
+  fileContents = fileContents.substring(fileContents.indexOf('\n', bannerPos));
 
   return readTime(fileContents);
 }

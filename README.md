@@ -15,9 +15,8 @@ See if you can add better syntax highlighting with [react-syntax-highlighter](ht
 
 ## bugs:
 
-- move frontmatter into a global context, so you can just pull it down based on the slug from the current url. Then you can fix these two errors:
-  - Reading time isn't visible on the posts, because it's not part of the frontmatter. It's calculated at load-time.
-    - maybe have the page component store this data in a context, so it can be shared and looked up by any component.
+- Add a red bar across the top of the page if a post has not been published and the user navigates to it.
+- Add a 404 page.
   - Add suggested other articles "You might also like to read:" at the end of every post
     - Show summaries of the five most recent posts.
     - Make sure you don't suggest the same article

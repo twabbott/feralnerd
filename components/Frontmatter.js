@@ -1,10 +1,12 @@
+import { useContext } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import styled from 'styled-components';
-import { responsiveContainer } from '../styles/mixins';
 
 import Date from './Date';
+import { responsiveContainer } from '../styles/mixins';
 import ReadingTime from './ReadingTime';
+import SiteInfoContext, { useFrontmatter } from './SiteInfoContext';
 
 const Article = styled.article`
   ${responsiveContainer}
@@ -26,16 +28,19 @@ const Article = styled.article`
   }
 `;
 
-const Frontmatter = ({
-  title,
-  keywords,
-  excerpt,
-  date,
-  children,
-  image,
-  imageAlt,
-  imageCredit,
-}) => {
+const Frontmatter = ({ children }) => {
+  const siteInfo = useContext(SiteInfoContext);
+  const {
+    title,
+    keywords,
+    excerpt,
+    date,
+    readingTime,
+    image,
+    imageAlt,
+    imageCredit,
+  } = useFrontmatter();
+
   const titleText = `${title} - Blog Rocket`;
   return (
     <>
@@ -48,6 +53,7 @@ const Frontmatter = ({
         <h1>{title}</h1>
         <p>
           <Date date={date} />
+          <ReadingTime minutes={readingTime} />
         </p>
         {excerpt && <p>{excerpt}</p>}
         {image && (
@@ -64,6 +70,7 @@ const Frontmatter = ({
           </>
         )}
         {children}
+        <p>There are {siteInfo.posts.length} other great posts to read!</p>
       </Article>
     </>
   );
