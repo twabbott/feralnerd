@@ -12,7 +12,7 @@ const Container = styled.article`
   .photo {
     position: relative;
     width: 320px;
-    height:180px;
+    height:140px;
     margin-right: 1em;
 
     & img {

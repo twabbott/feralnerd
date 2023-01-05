@@ -2,7 +2,7 @@
   "posts": [
     {
       "filename": "./2022-04/sed-dignissim-lacinia-nunc/index.mdx",
-      "link": "./posts/2022-04/sed-dignissim-lacinia-nunc",
+      "link": "/posts/2022-04/sed-dignissim-lacinia-nunc",
       "slug": "sed-dignissim-lacinia-nunc",
       "readingTime": 1,
       "isPublished": true,
@@ -22,7 +22,7 @@
     },
     {
       "filename": "./2022-03/lorem-ipsum/index.mdx",
-      "link": "./posts/2022-03/lorem-ipsum",
+      "link": "/posts/2022-03/lorem-ipsum",
       "slug": "lorem-ipsum",
       "readingTime": 2,
       "isPublished": true,
@@ -42,7 +42,7 @@
     },
     {
       "filename": "./2022-03/cras-metus/index.mdx",
-      "link": "./posts/2022-03/cras-metus",
+      "link": "/posts/2022-03/cras-metus",
       "slug": "cras-metus",
       "readingTime": 1,
       "isPublished": true,
@@ -62,7 +62,7 @@
     },
     {
       "filename": "./2022-01/what-is-react-native/index.mdx",
-      "link": "./posts/2022-01/what-is-react-native",
+      "link": "/posts/2022-01/what-is-react-native",
       "slug": "what-is-react-native",
       "readingTime": 1,
       "isPublished": true,
@@ -82,7 +82,7 @@
     },
     {
       "filename": "./2022-01/learn-react-navigation/index.mdx",
-      "link": "./posts/2022-01/learn-react-navigation",
+      "link": "/posts/2022-01/learn-react-navigation",
       "slug": "learn-react-navigation",
       "readingTime": 1,
       "isPublished": true,

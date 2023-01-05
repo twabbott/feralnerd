@@ -6,6 +6,7 @@ import Date from './Date';
 import { responsiveContainer } from '../styles/mixins';
 import ReadingTime from './ReadingTime';
 import { useFrontmatter } from './SiteInfoContext';
+import SuggestedReading from './SuggestedReading';
 
 const Article = styled.article`
   ${responsiveContainer}
@@ -84,6 +85,7 @@ const Frontmatter = ({ children }) => {
           </>
         )}
         {children}
+        <SuggestedReading />
       </Article>
     </>
   );

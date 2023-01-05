@@ -40,7 +40,7 @@ const Container = styled.article`
   }
 `;
 
-const PostSummary = ({
+const PostHeadliner = ({
   title,
   date,
   excerpt,
@@ -72,9 +72,9 @@ const PostSummary = ({
   );
 };
 
-PostSummary.defaultProps = {
+PostHeadliner.defaultProps = {
   title: '[Title not set]',
   imageAlt: 'Hero image',
 };
 
-export default PostSummary;
+export default PostHeadliner;

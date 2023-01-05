@@ -15,8 +15,8 @@ See if you can add better syntax highlighting with [react-syntax-highlighter](ht
 
 ## bugs:
 
-- Add a red bar across the top of the page if a post has not been published and the user navigates to it.
 - Add a 404 page.
-  - Add suggested other articles "You might also like to read:" at the end of every post
-    - Show summaries of the five most recent posts.
-    - Make sure you don't suggest the same article
+  - show url they were trying to get to
+  - I'm sorry, that page doesn't exist.
+  - Take me back button
+  - Suggest some other articles

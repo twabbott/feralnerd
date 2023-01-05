@@ -47,8 +47,6 @@ export function useFrontmatter() {
   const slug = router.asPath.substring(router.asPath.lastIndexOf('/') + 1);
   const frontmatter = posts.find((item) => item.slug === slug);
 
-  console.log('frontmatter', frontmatter);
-
   return frontmatter;
 }
 

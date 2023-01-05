@@ -52,8 +52,12 @@ export default Home;
 export async function getStaticProps() {
   // 🚩 Need this here, because this is how we build siteInfo.json
   const posts = await buildSiteInfoJson();
-  console.log('posts', posts);
 
+  console.log('Re-built siteInfo.json');
+  // prettier-ignore
+  posts.forEach((post) => {
+    console.log(`   ${post.date}: ${post.isPublished ? '' : '[not published] '}${post.link}`);
+  });
   return {
     props: {},
   };

@@ -8,10 +8,10 @@ function getFileInfo(pathname) {
   if (parts[parts.length - 1] === 'index.mdx') {
     parts.pop();
   }
-  parts.splice(1, 0, 'posts');
+  parts.splice(0, 1, 'posts');
   const slug = parts[parts.length - 1];
 
-  const link = parts.join(path.sep);
+  const link = '/' + parts.join(path.sep);
 
   return { filename: pathname, link, slug, readingTime: getReadTime(pathname) };
 }
