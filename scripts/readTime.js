@@ -1,8 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 
-const START_BANNER = '{/* BEGIN */}';
-
 function readTime(content) {
   const WPS = 275 / 60;
 
