@@ -96,7 +96,7 @@ export default function PageFooter() {
           ))}
           <div className="social">
             {siteMap.social.map((item) => (
-              <SocialApp {...item} />
+              <SocialApp key={item.icon} {...item} />
             ))}
           </div>
           <p>&copy; 2022, All Rights Reserved</p>
