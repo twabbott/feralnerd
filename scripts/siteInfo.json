@@ -1,6 +1,26 @@
 {
   "posts": [
     {
+      "filename": "./template/index.mdx",
+      "link": "/posts/template",
+      "slug": "template",
+      "readingTime": 2,
+      "isPublished": true,
+      "title": "Template Blog",
+      "date": "2023-01-07",
+      "excerpt": "This is a template blog",
+      "image": {
+        "src": "/_next/static/media/hero.ece60159.jpg",
+        "height": 1080,
+        "width": 1920,
+        "blurDataURL": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhero.ece60159.jpg&w=8&q=70",
+        "blurWidth": 8,
+        "blurHeight": 5
+      },
+      "imageAlt": "Photo by someone",
+      "imageCredit": "Photo by <a href=\"https://unsplash.com/@wandercreative?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Wander Creative</a> on <a href=\"https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\"> Unsplash</a>"
+    },
+    {
       "filename": "./2022-04/sed-dignissim-lacinia-nunc/index.mdx",
       "link": "/posts/2022-04/sed-dignissim-lacinia-nunc",
       "slug": "sed-dignissim-lacinia-nunc",
@@ -14,26 +34,6 @@
         "height": 1080,
         "width": 1920,
         "blurDataURL": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhero.61b764e5.jpg&w=8&q=70",
-        "blurWidth": 8,
-        "blurHeight": 5
-      },
-      "imageAlt": "Photo by someone",
-      "imageCredit": "Photo by <a href=\"https://unsplash.com/@wandercreative?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Wander Creative</a> on <a href=\"https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\"> Unsplash</a>"
-    },
-    {
-      "filename": "./2022-03/lorem-ipsum/index.mdx",
-      "link": "/posts/2022-03/lorem-ipsum",
-      "slug": "lorem-ipsum",
-      "readingTime": 2,
-      "isPublished": true,
-      "title": "Lorem ipsum dolor sit amet",
-      "date": "2022-03-21",
-      "excerpt": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea deserunt ab maiores eligendi nemo, ipsa, pariatur",
-      "image": {
-        "src": "/_next/static/media/hero.ece60159.jpg",
-        "height": 1080,
-        "width": 1920,
-        "blurDataURL": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhero.ece60159.jpg&w=8&q=70",
         "blurWidth": 8,
         "blurHeight": 5
       },
