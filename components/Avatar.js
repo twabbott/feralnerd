@@ -15,7 +15,7 @@ const Container = styled.div`
 function Avatar(props) {
   return (
     <Container>
-      <Image {...props} />
+      <Image {...props} alt="avatar" />
     </Container>
   );
 }
