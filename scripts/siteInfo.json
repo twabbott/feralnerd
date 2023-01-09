@@ -1,6 +1,26 @@
 {
   "posts": [
     {
+      "filename": "./template/index.mdx",
+      "link": "/posts/template",
+      "slug": "template",
+      "readingTime": 2,
+      "isPublished": true,
+      "title": "New Post Template",
+      "date": "2023-01-01",
+      "excerpt": "This is a sample post.  Let's get started blogging!",
+      "image": {
+        "src": "/_next/static/media/hero.d16a8d9c.jpg",
+        "height": 1080,
+        "width": 1920,
+        "blurDataURL": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhero.d16a8d9c.jpg&w=8&q=70",
+        "blurWidth": 8,
+        "blurHeight": 5
+      },
+      "imageAlt": "Hero image",
+      "imageCredit": "Photo by <a href=\"https://unsplash.com/@dell?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Dell</a> on <a href=\"https://unsplash.com/photos/0J8thHZfosE?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Unsplash</a>"
+    },
+    {
       "filename": "./2022-04/sed-dignissim-lacinia-nunc/index.mdx",
       "link": "/posts/2022-04/sed-dignissim-lacinia-nunc",
       "slug": "sed-dignissim-lacinia-nunc",
