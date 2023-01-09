@@ -6,9 +6,9 @@
       "slug": "template",
       "readingTime": 2,
       "isPublished": true,
-      "title": "Template Blog",
+      "title": "Template Post",
       "date": "2023-01-07",
-      "excerpt": "This is a template blog",
+      "excerpt": "This is a template post",
       "image": {
         "src": "/_next/static/media/hero.ece60159.jpg",
         "height": 1080,
@@ -18,87 +18,6 @@
         "blurHeight": 5
       },
       "imageAlt": "Photo by someone",
-      "imageCredit": "Photo by <a href=\"https://unsplash.com/@wandercreative?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Wander Creative</a> on <a href=\"https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\"> Unsplash</a>"
-    },
-    {
-      "filename": "./2022-04/sed-dignissim-lacinia-nunc/index.mdx",
-      "link": "/posts/2022-04/sed-dignissim-lacinia-nunc",
-      "slug": "sed-dignissim-lacinia-nunc",
-      "readingTime": 1,
-      "isPublished": true,
-      "title": "Sed dignissim lacinia nunc",
-      "date": "2022-04-09",
-      "excerpt": "Curabitur tortor. Pellentesque nibh. Aenean quam. In scelerisque sem at dolor. Maecenas mattis. Sed convallis tristique sem. Proin ut ligula vel nunc egestas porttitor",
-      "image": {
-        "src": "/_next/static/media/hero.61b764e5.jpg",
-        "height": 1080,
-        "width": 1920,
-        "blurDataURL": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhero.61b764e5.jpg&w=8&q=70",
-        "blurWidth": 8,
-        "blurHeight": 5
-      },
-      "imageAlt": "Photo by someone",
-      "imageCredit": "Photo by <a href=\"https://unsplash.com/@wandercreative?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Wander Creative</a> on <a href=\"https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\"> Unsplash</a>"
-    },
-    {
-      "filename": "./2022-03/cras-metus/index.mdx",
-      "link": "/posts/2022-03/cras-metus",
-      "slug": "cras-metus",
-      "readingTime": 1,
-      "isPublished": true,
-      "title": "Cras metus",
-      "date": "2022-03-07",
-      "excerpt": "Sed aliquet risus a tortor. Integer id quam. Morbi mi. Quisque nisl felis, venenatis tristique, dignissim in, ultrices sit amet, augue.",
-      "image": {
-        "src": "/_next/static/media/hero.da1426e0.jpg",
-        "height": 1080,
-        "width": 1920,
-        "blurDataURL": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhero.da1426e0.jpg&w=8&q=70",
-        "blurWidth": 8,
-        "blurHeight": 5
-      },
-      "imageAlt": "Lorem ipsum",
-      "imageCredit": "Photo by <a href=\"https://unsplash.com/@wandercreative?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Wander Creative</a> on <a href=\"https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\"> Unsplash</a>"
-    },
-    {
-      "filename": "./2022-01/what-is-react-native/index.mdx",
-      "link": "/posts/2022-01/what-is-react-native",
-      "slug": "what-is-react-native",
-      "readingTime": 1,
-      "isPublished": true,
-      "title": "What is React Native?",
-      "date": "2022-01-31",
-      "excerpt": "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ea deserunt ab maiores eligendi nemo, ipsa, pariatur",
-      "image": {
-        "src": "/_next/static/media/hero.18053015.jpg",
-        "height": 1080,
-        "width": 1920,
-        "blurDataURL": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhero.18053015.jpg&w=8&q=70",
-        "blurWidth": 8,
-        "blurHeight": 5
-      },
-      "imageAlt": "Lorem ipsum",
-      "imageCredit": "Photo by <a href=\"https://unsplash.com/@wandercreative?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Wander Creative</a> on <a href=\"https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\"> Unsplash</a>"
-    },
-    {
-      "filename": "./2022-01/learn-react-navigation/index.mdx",
-      "link": "/posts/2022-01/learn-react-navigation",
-      "slug": "learn-react-navigation",
-      "readingTime": 1,
-      "isPublished": true,
-      "title": "React Navigation Tutorial",
-      "date": "2022-01-06",
-      "excerpt": "React Navigation is a number one tool to learn in React Native. You would always use them; these are some of the best practices in using React Navigation",
-      "keywords": "lorem, ipsum, dolor, sit amit",
-      "image": {
-        "src": "/_next/static/media/hero.18053015.jpg",
-        "height": 1080,
-        "width": 1920,
-        "blurDataURL": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhero.18053015.jpg&w=8&q=70",
-        "blurWidth": 8,
-        "blurHeight": 5
-      },
-      "imageAlt": "Lorem ipsum",
       "imageCredit": "Photo by <a href=\"https://unsplash.com/@wandercreative?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Wander Creative</a> on <a href=\"https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\"> Unsplash</a>"
     }
   ]
