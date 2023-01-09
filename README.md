@@ -1,4 +1,4 @@
-# Blog Rocket
+# FeralNerd Blog
 
 The blog template project, that's rocket-fast! 🚀
 
