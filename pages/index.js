@@ -6,6 +6,7 @@ import PostHeadliner from '@/components/PostHeadliner';
 import { buildSiteInfoJson } from '../scripts/buildSiteInfo';
 import { responsiveContainer } from '../styles/mixins';
 import { useAllPosts } from '@/components/SiteInfoContext';
+import { siteMap } from 'scripts/siteMap';
 
 const Container = styled.div`
   ${responsiveContainer}
@@ -23,7 +24,7 @@ function Home() {
   return (
     <>
       <Head>
-        <title>Blog Rocket</title>
+        <title>{siteMap.title}</title>
       </Head>
 
       <Container>

@@ -2,6 +2,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
 
+import { siteMap } from '../scripts/siteMap';
 import SuggestedReading from 'components/SuggestedReading';
 import { responsiveContainer } from '../styles/mixins';
 import posts from '../scripts/siteInfo.json';
@@ -35,7 +36,7 @@ export default function Error404() {
   return (
     <>
       <Head>
-        <title>404 Not Found - Blog Rocket</title>
+        <title>404 Not Found - {siteMap.title}</title>
       </Head>
 
       <Article>

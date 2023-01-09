@@ -2,6 +2,7 @@ import Head from 'next/head';
 import Image from 'next/image';
 import styled from 'styled-components';
 
+import { siteMap } from 'scripts/siteMap';
 import Date from './Date';
 import { responsiveContainer } from '../styles/mixins';
 import ReadingTime from './ReadingTime';
@@ -52,7 +53,7 @@ const Frontmatter = ({ children }) => {
     imageCredit,
   } = useFrontmatter();
 
-  const titleText = `${title} - Blog Rocket`;
+  const titleText = `${title} - ${siteMap.title}`;
   return (
     <>
       <Head>

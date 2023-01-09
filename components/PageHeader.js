@@ -58,7 +58,7 @@ function PageHeader() {
     <Container>
       <nav>
         <h1 className="title">
-          <Link href="/">Blog Rocket</Link>
+          <Link href="/">{siteMap.title}</Link>
         </h1>
         <ul>
           {siteMap.menu.map((item) => (

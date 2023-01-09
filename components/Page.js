@@ -1,5 +1,7 @@
 import Head from 'next/head';
 import styled from 'styled-components';
+
+import { siteMap } from 'scripts/siteMap';
 import { responsiveContainer } from '../styles/mixins';
 
 const Article = styled.article`
@@ -9,7 +11,7 @@ const Article = styled.article`
 `;
 
 const Page = ({ title, children }) => {
-  const titleText = `${title} - Blog Rocket`;
+  const titleText = `${title} - ${siteMap.title}`;
   return (
     <>
       <Head>

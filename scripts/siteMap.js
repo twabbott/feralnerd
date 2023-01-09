@@ -7,6 +7,7 @@ export const SocialApps = {
 };
 
 export const siteMap = {
+  title: 'Blog Rocket',
   menu: [
     {
       id: 1,
