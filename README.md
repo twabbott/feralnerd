@@ -1,31 +1,11 @@
 # FeralNerd Blog
 
-The blog template project, that's rocket-fast! 🚀
+Tom Abbott's tech blog.
 
-Features:
+This blog was created using using a fork of the [Blog Rocket](https://github.com/tom-abbott-irh/blog-rocket)
 
-- Creating a new post is as easy as making a new folder and adding `index.mdx`
-- Automated front page
-  - Pages are added automatically, once you build the project. Pages appear on the front page without any additional configuration.
-  - Pages are sorted by date, with the most recent at the top.
-  - The first article is full-width. The second and third articles are half-width, and the next 20 articles appear in a list with a thumbnail photo.
-- Page frontmatter is fully data-driven
-  - Post title
-  - Hero image
-  - Summary
-  - Reading time (automatically calculated)
-- Fully responsive mobile-first design.
-- Styling is controlled by a theme, so you can change the color scheme to something you like.
 
-## Tech stack
 
-This is a sample blog app using Next.js. I based it on the instructions from [this article](https://blog.logrocket.com/create-next-js-mdx-blog/).
-
-1. `@mdx-js/loader@next` Allows us to write our posts in Markdown (MDX), so we don't have to "program" every article. MDX is just better for writing content.
-2. `@mdx-js/react@next` Allows us to integrate MDX with Next.js
-3. `rehype-highlight` allows us to use highlight.js to apply syntax highlighting to any code block
-
-Not using `grey-matter`. Why? Well ... because I wanted to be able to reference frontmatter content within the MDX file. I found that I had a lot of copy-pasting to do. MDX really doesn't need this library. So, yeah.
 
 ## Running the project locally
 

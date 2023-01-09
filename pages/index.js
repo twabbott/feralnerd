@@ -31,7 +31,7 @@ function Home() {
         {!first && (
           <>
             <h1>( ._.)</h1>
-            <p>Sure looks empty here. Let's create some content!</p>
+            <p>Sure looks empty here. Let&apos;s create some content!</p>
           </>
         )}
         <div className="headliner2">

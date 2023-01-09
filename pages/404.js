@@ -44,7 +44,7 @@ export default function Error404() {
           <strong>404</strong> | That URL does not exist.
         </p>
         <pre>{url}</pre>
-        <p>...but wait, there's more!</p>
+        <p>...but wait, there&apos;s more!</p>
         <p>Check out these other fine articles. 👇</p>
         <SuggestedReading maxCount={20} />
       </Article>
