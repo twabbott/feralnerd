@@ -1,9 +1,9 @@
-import { getPosts } from '../../scripts/buildSiteInfo';
+//import { buildSiteInfoJson } from '../../scripts/buildSiteInfo';
 
 export default function handler(req, res) {
   const { page } = req.query;
 
-  const posts = getPosts(page);
+  const posts = [];
 
   res.status(200).json(posts);
 }

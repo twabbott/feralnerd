@@ -2,10 +2,9 @@
 
 Tom Abbott's tech blog.
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/9dc55269-db7c-4448-ae62-c5452624978e/deploy-status)](https://app.netlify.com/sites/feralnerd/deploys)
+
 This blog was created using using a fork of the [Blog Rocket](https://github.com/tom-abbott-irh/blog-rocket)
-
-
-
 
 ## Running the project locally
 
