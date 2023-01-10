@@ -1,8 +1,10 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import styled from 'styled-components';
 
 import { siteMap } from '../scripts/siteMap';
 import { responsiveContainer } from '../styles/mixins';
+import logo from '../public/images/feral-nerd.png';
 
 const Container = styled.header`
   background-color: ${(props) => props.theme.colors.bgSecondary};
@@ -17,9 +19,17 @@ const Container = styled.header`
     height: 3em;
   }
 
+  & .left {
+    display: flex;
+  }
+
+  & .logo {
+    margin-top: 3px;
+  }
+
   & h1.title {
-    margin 0 0;
-    padding: .3em 0;
+    margin 13px 0 0 .5em;
+    padding: 0 0;
 
     & a {
     color: ${(props) => props.theme.colors.logo};
@@ -57,9 +67,21 @@ function PageHeader() {
   return (
     <Container>
       <nav>
-        <h1 className="title">
-          <Link href="/">{siteMap.title}</Link>
-        </h1>
+        <div className="left">
+          <Link href="/">
+            {' '}
+            <Image
+              src={logo}
+              width="48"
+              height="48"
+              alt="logo"
+              className="logo"
+            />
+          </Link>
+          <h1 className="title">
+            <Link href="/">{siteMap.title}</Link>
+          </h1>
+        </div>
         <ul>
           {siteMap.menu.map((item) => (
             <li key={item.id}>

@@ -8,6 +8,7 @@ import { responsiveContainer } from '../styles/mixins';
 import ReadingTime from './ReadingTime';
 import { useFrontmatter } from './SiteInfoContext';
 import SuggestedReading from './SuggestedReading';
+import logo from '../public/images/feral-nerd.png';
 
 const Article = styled.article`
   ${responsiveContainer}
@@ -26,6 +27,11 @@ const Article = styled.article`
   & .imageCredit {
     text-align: center;
     font-size: 0.8em;
+  }
+
+  & .endLogo {
+    display: block;
+    margin: 5em auto;
   }
 `;
 
@@ -86,6 +92,7 @@ const Frontmatter = ({ children }) => {
           </>
         )}
         {children}
+        <Image src={logo} alt={logo} className="endLogo" />
         <SuggestedReading />
       </Article>
     </>

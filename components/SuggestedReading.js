@@ -8,7 +8,6 @@ import SiteInfoContext, {
 } from './SiteInfoContext';
 
 const Line = styled.hr`
-  margin-top: 5em;
   border: none;
   background-color: ${(props) => props.theme.colors.bgSecondary};
   height: 5px;
