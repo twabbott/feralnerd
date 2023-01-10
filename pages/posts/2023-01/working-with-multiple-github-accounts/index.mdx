@@ -1,0 +1,206 @@
+import Image from 'next/image';
+import Frontmatter from "@/components/Frontmatter.js";
+
+import image from "./hero.jpg";
+import img_0000 from "./0000.png";
+import img_0001 from "./0001.png";
+import img_0002 from "./0002.png";
+
+export const frontmatter = {
+    isPublished: true,
+    title: "Working with multiple GitHub Accounts",
+    date: "2023-01-10",
+    excerpt: "Suppose you you have a GitHub account that you use for work and another account that you use for your personal projects. If you want to use them both on the same computer, you're going to need to use SSH.",
+    image,
+    imageAlt: "Hero image",
+    imageCredit: `Photo by <a href="https://unsplash.com/@dell?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Dell</a> on <a href="https://unsplash.com/photos/0J8thHZfosE?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>`,
+}
+
+export default ({children}) => (<Frontmatter>{children}</Frontmatter>);
+
+If you're using HTTPS to communicate with GitHub, which is the recommended protocol, it's really only going to let you to work with one account on your machine.  This can be a problem, however, if you need to work with multiple remote repos.
+
+* You use your laptop for work and for personal use.
+* You have an account on GitHub, another on BitBucket, another on Azure, etc.
+* You and your partner both code, and you share a workstation.
+
+Well, you're in luck.  Git, it turns out, has no protocol of its own, and was designed to work over a variety of commuinication channels.  The two most popular are HTTPS, and SSH.  If you're going to work with multiple accounts then you're going to need to set up SSH.
+
+For this article, I am using Windows and WSL2.  I have used these instructions with both the latest Ubuntu and Debian with very little difference.  These instructions should work equally well on a Mac.
+
+> 📝 Side note: I do know that there's a way to get SSH working with either PowerShell or the command prompt, but that is for another post.
+
+For this tutorial, we will use the following commands:
+
+- <b>ssh-keygen:</b> generates keys
+- <b>ssh-agent:</b> Linux’s authentication agent (a server app, of sorts)
+- <b>ssh-add:</b> adds SSH keys
+
+# Generate a SSL key
+Open up a terminal window, and go to your local .ssh directory (yes, you must be in this directory).
+
+```bash
+$ cd ~/.ssh
+```
+
+> 📝 Side note: Debian did not have a .ssl directory, so I had to create one.  If you're not familiar with Linux, this directory needs to live under your home directory (`~/.ssl``).  It’s okay if the folder is blank.
+
+> ⚠️ Be careful to not overwrite any other keys that you may have in this folder (other files that begin with “id_rsa_”).
+
+Now you can generate an SSH key using the ssh-keygen command.  The general syntax is:
+
+```bash
+$ ssh-keygen -t rsa -C "your-email-address" 
+```
+
+For this article I'm going to use the fake email address of `john.doe@myemail.com`, so I'd type this:
+
+```bash
+$ ssh-keygen -t rsa -C "john.doe@myemail.com" 
+```
+
+The command will show the following prompt:
+
+```
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/vaati/.ssh/id_rsa):
+```
+
+Now you need to come up with a name for your key.  This name can be anything you want, but it should probably be one word (like your GitHub username).  You should name it after the GitHub account that you’re pushing to.  For this article I'm going to use the fake username, "johndoe".  So I would enter in "id_rsa_johndoe"
+
+After you enter a key name, you’ll get a prompt to enter a passphrase.  Just hit enter twice.  Once you’ve done that, you’ll see some weird output like this:
+
+```
+Your identification has been saved in /home/vaati/.ssh/id_rsa_johndoe
+Your public key has been saved in /home/vaati/.ssh/id_rsa_johndoe.pub
+The key fingerprint is:
+SHA256:PLusNPF6nf5e2jr/z57EB1gl5YW43Tw55TPqhTu4z3g john.doe@myemail.com
+The key's randomart image is: 
++---[RSA 3072]----+
+|   . . .oo...    |
+|    + .o. +  .   |
+|     Oo  . +.    |
+|.   +.+.o o.     |
+|..E .. +So.      |
+|.o..+ o  ...     |
+|==o* .  o ..     |
+|*+O..    o  .    |
+|+Boo      ..     |
++----[SHA256]-----+
+```
+
+I don’t know what the randomart thing is all about, but it’s kind of cool.  
+
+Whatever.
+
+Now, if you list the file contents, you’ll see the following (I used “twabbott” as my key-name):
+```bash
+$ ls -al
+```
+
+And you'll see something like this:
+```
+total 20
+drwxr-xr-x  2 twabbott twabbott 4096 Jan  7 12:20 .
+drwxr-xr-x 13 twabbott twabbott 4096 Jan  7 12:38 ..
+-rw-------  1 twabbott twabbott 2610 Jan  7 12:13 id_rsa_johndoe
+-rw-r--r--  1 twabbott twabbott  574 Jan  7 12:13 id_rsa_johndoe.pub
+```
+
+There are two files:
+
+- <b>id_rsa_johndoe:</b> this is your private key.
+- <b>id_rsa_johndoe.pub:</b> this is your public key.
+
+# Add the SSH Key to the Agent
+Each time you create a new key, you need to tell the authentication agent about it.  First, start the authentication agent:
+
+```bash
+$ eval "$(ssh-agent -s)"
+```
+
+That started the ssh agent running in the background.  I got this line in response:
+
+```
+Agent pid 3710
+```
+
+Now you need to add the key that you just generated:
+
+```bash
+$ ssh-add ~/.ssh/id_rsa_johndoe
+```
+
+You should get this reply:
+
+```
+Identity added: /home/twabbott/.ssh/id_rsa_twabbott (you@email.com)
+```
+
+Ok, now you have your new SSH key all set up.
+
+# Create a SSH config file
+In this next step, we're going to configure SSH to use our key when talking with GitHub.
+
+You need to create a file called config, in your .ssh directory.  Paste in the following text:
+
+```
+Host *
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/id_rsa_johndoe
+```
+
+Do not use VSCode to create this file.  VS Code wants to strip out the leading spaces.  
+Also, there should be two spaces before each indented line (don’t use tabs).
+This file will tell github which SSH key to use when it tries to authenticate.
+
+# Tell GitHub about your SSH key
+Log into your GitHub account.  
+1.	Go to the dropdown next to your profile image (upper right), and select Settings.  This will take you to the settings page for your personal account.
+2.	In the nav-menu on the left, select SSH and GPG keys.  This will take you to a screen that lists all your SSH keys (which will be blank, if you haven’t added any yet).
+
+Click the button to add a new SSH key.
+
+- Give the key a name.  This name is to help you remember where the key is being used.  A good suggestion is to name it after the computer where it’s being used.
+- For the key type, leave it set as Authentication Key.
+- Paste in the text for the .pub key
+  - Go to your .ssh directory, and open up id_rsa_johndoe.pub in a text editor.  Copy the whole thing.
+  - Paste it into the text box in your browser.
+- Click Add SSH Key.
+
+Here’s a screenshot:
+
+<Image src={img_0000} alt="Add SSH key" className="indentedImage" />
+
+Click the "Add SSH key" button, and you're done!.  It should look something like this:
+
+<Image src={img_0001} alt="SSH keys" className="indentedImage" />
+
+# Clone your repo
+Ok, now you can clone your repo.  When you do, you’ll need to use the SSH URL instead of the HTTPS URL.  Here's a screenshot:
+
+<Image src={img_0002} alt="Clone with SSH" className="indentedImage" />
+
+Now go to your home directory (make sure you’re not still in ~/.ssh!!). 
+
+```bash
+$ cd ~
+```
+
+And clone your repo:
+
+```bash
+$ git clone git@github.com:twabbott/feralnerd.git
+```
+
+To verify that you really, really can connect, do a git pull:
+
+```bash
+$ git pull
+Already up to date.
+```
+
+And that’s it.  In 30 easy steps.  I 🧡 Linux!
+
+🙃
+
