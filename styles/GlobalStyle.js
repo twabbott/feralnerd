@@ -74,4 +74,8 @@ pre {
   border-radius: 4px;
   padding: 1em;
 }
+
+.indentedImage {
+  margin-left: .5in;
+}
 `;

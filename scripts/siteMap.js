@@ -7,7 +7,7 @@ export const SocialApps = {
 };
 
 export const siteMap = {
-  title: 'Blog Rocket',
+  title: 'The Feral Nerd',
   menu: [
     {
       id: 1,
