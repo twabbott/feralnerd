@@ -1,0 +1,497 @@
+import Image from 'next/image';
+import Frontmatter from "@/components/Frontmatter.js";
+
+import image from "./hero.jpg";
+import promiseDiagram from "./promise-diagram.png";
+
+export const frontmatter = {
+    isPublished: false,
+    title: "Understanding Promises in JavaScript",
+    date: "2023-01-14",
+    excerpt: "Let's talk about promises and how they work.  We're going to do a deep dive using a very basic example with pictures.",
+    image,
+    imageAlt: "Hero image",
+    imageCredit: `Photo by <a href="https://unsplash.com/@cytonn_photography?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Cytonn Photography</a> on <a href="https://unsplash.com/photos/vWchRczcQwM?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>`,
+}
+
+export default ({children}) => (<Frontmatter>{children}</Frontmatter>);
+
+Promises were invented as a way for JavaScript to manage callback functions that are needed when performing some kind of long-running task.
+
+# The problem
+
+Imagine you have a webpage, and it needs to do something like:
+
+* make a request to fetch some data that you want to show on the page.
+* set a timer, then do something after it has elapsed.
+
+All of these tasks are managed in JavaScript, using callbacks.  Suppose we have a function called `foo`, which needs to fetch a report that takes about 10 seconds to run, then returns some data.  For the purposes of this example, we'll return the number 5. 
+
+```JavaScript
+function foo(myCallback) {
+  // Doing lots of stuff...
+
+  // Very busy in here...
+
+  // Yeah, it's gonna be a while. 😅
+
+  // Ok, I'm done.  The answer is 5
+  myCallback(5);
+}
+```
+
+Here is how we would call `foo`:
+
+```JavaScript
+// Stuff to do, afterwords
+function myCallback(data) {
+  // Display the data
+
+  console.log('Here is the data:', data);
+}
+
+// Now let's call foo
+foo(myCallback);
+```
+
+This works pretty well for most cases, but what do you do if there's an error?  In this example there is no way to tell the callback function that something is wrong.  
+
+One technique to get around this problem is to add a second parameter to `foo`, which is an error callback.
+
+```JavaScript
+function foo(successCallback, errorCallback) {
+  // Fetching a very long report...
+
+  // Yeah, it's taking a while...
+
+  // Done! Now check for errors.
+  if (someError) {
+    errorCallback("Oh, no! 😯");
+  } else {
+    successCallback(5);
+  }
+}
+```
+
+It's not a bad solution and it works well in simple cases, but what if you need to call `foo` again, right away?  Maybe you're processing requests in chunks, or you're working on a batch of data.  Or, `foo` could represent three different functions that have to be called, while initializing your page: load customer preferences, load a list of items to work with, and load the first item to be worked on.
+
+```JavaScript
+foo((data) => {
+  console.log('First batch of data:', data);
+
+  foo((data) => {
+    console.log('Next batch of data data:', data);
+
+    foo((data) => {
+      console.log('And yet another batch of data data:', data);
+
+      // Ad nausium...
+    });
+  });
+});
+```
+
+Now imagine adding error callbacks into all that ☝, and you begin to see the limitations of this pattern.  Nested callbacks make your code hard to read and hard to maintain.
+
+# Introducing promises
+
+Promises have been around for a while now, but they haven't been a standard part of JavaScript until ES6.  So, how do they work?
+
+Instead of passing in callbacks, your funciton returns a promise.  For the purpose of our example, `foo` is going to do the following.
+
+```JavaScript
+function foo() {
+  return Promise.resolve(5); // <-- More about this, later!
+}
+```
+
+So, instead of requiring us to pass in success/error callback functions, `foo` now returns this new thing, called a `Promise`.
+
+> NOTE: I'm not going to go into an explanation of how to create a new `Promise` object, because that pattern way too low-level, and it's well beyond the scope of this article.  I will explain what the `resolve` function does later on in this article.  
+
+This `Promise` object behaves like a handle, and it helps you keep track of what's going on inside of `foo`.  Here is how we call `foo`;
+
+```JavaScript
+const myPromise = foo();
+```
+
+Okay, what do we do with a promise?
+
+A `Promise` has three "states".  You can think of it kind of like a flowchart in the image below (reading left to right).
+
+<Image src={promiseDiagram} alt="Diagram of a promise" className="indentedImage" />
+
+Each `Promise` begins life in a "pending" state, which means the operation hasn't completed yet, and we're still waiting for it.  Once the operation has completed, the `Promise` is considered "settled", and it is in one of two states:
+
+* <b>resolved:</b> the operation has successfully completed, and the results (if any) are ready to use.
+* <b>rejected:</b> there was an error
+
+A handy trick that I use to remember these three terms is to think of a lawsuit.  Two parties are in dispute and they go to court, and their case is "pending" trial.  At some point the judge will render a decision, and then the case is now "resolved".  If the judge doesn't like the case, or thinks it's not ready for trial, he or she can throw it out, and it's "rejected".  
+
+# Getting your results
+
+Ok, so now you have a promise object, how do you get the results?
+
+Every `Promise` object has a method, called `then`.  Your `then` method takes a callback, which JavaScript will call when the operation has finished.  Your callback can have a single parameter, which will contain the result.
+
+You use it like this:
+
+```JavaScript
+foo().then(
+  (data) => {
+    console.log('Here is the data:', data);
+  }
+);
+```
+
+If you want to handle errors, Your `then` function can also take an error callback.  The error callback takes a single parameter which contains the error.  Here is how you would use it:
+
+```JavaScript
+foo().then(
+  (data) => {
+    console.log('Here is the data:', data);
+  },
+  (error) => {
+    console.error('There was an error calling foo:', error);
+  }
+);
+```
+
+# Advantages
+
+Ok so on the surface, this looks like we're still using callbacks, but now we're adding <u>extra</u> steps.  How does this make things better?
+
+Things are better for a number of reasons:
+
+1. Calling your function is a lot cleaner.  You just pass in whatever parameters you need.  You don't care about the callbacks.
+2. The `Promise` object can be passed around.  It can be stored and used later.  A function can return it as a result, and then the function's caller can worry about it.
+3. Because of point #2, you can add callbacks when you actually need them, where you need them.
+
+All of this means cleaner code.
+
+```JavaScript
+const myPromise = foo();
+
+// I can do other stuff, while I'm waiting for foo to do its thing.
+
+// Ok, now let's see the results.
+myPromise.then((data) => console.log('Here is the data:', data));
+```
+
+Here's another example.  Function calls get wrapped inside function calls all the time.  Imagine the actual call to `foo` is three levels deep.  You never see `foo`; instead, you call `funcOne`, and `funcOne` uses a library function called `funcTwo`, and it's `funcTwo` which actually handles the call to `foo`.  If you were using straight callbacks, here is what you would have to code up:
+
+```JavaScript
+function funcOne(success, error) {
+  funcTwo(success, error);
+}
+
+function funcTwo(success, error) {
+  foo(success, error);
+}
+```
+
+You would have to pass your callbacks down to every function in the call sequence.  Let's see how much cleaner things are if `foo` returns a `Promise`, instead.  
+
+```JavaScript
+function funcOne() {
+  return funcTwo;
+}
+
+function funcTwo() {
+  return foo();
+}
+```
+
+You didn't have to do anything special to either `funcOne` or `funcTwo`, they just do their thing and return whatever `foo` returns.  
+
+The key is this: they don't need to know that `foo` was special in any way, whatsoever.  All they had to do was pass the return value back to the caller.
+
+It's the caller's responsibility to deal with the result of `foo`.
+
+```JavaScript
+funcOne()
+    .then((data) => console.log('Here is foo\'s result:', data));
+```
+
+See it yet?  By returning a `Promise`, no one has to worry about managing callbacks until they need to.  `foo` just does its job, and returns the promise.  Whoever called `foo` can deal with the promise, or they can pass it to another part of the code to handle it.
+
+# Order of execution
+
+So, this is pretty cool, but you might be wondering if there isn't a way to somehow return the answer back to the caller directly.  Do we really have to use a callback?  Why can't we just do something like this:
+
+```JavaScript
+const answer = foo().then(data => { 
+    return data;
+});
+
+console.writeline("The answer is:", answer);
+```
+
+It's important to understand that when you call a `then` method, **JavaScript does not call your callback right away&mdash;ever**.  JavaScript <u>saves it for later</u>.  
+
+You can't ever return the actual value back to the calling code.  
+
+Why not?  Because the calling code runs to completion.  It doesn't wait for `foo` to complete&mdash;which is the entire point of promises.  The calling code doesn't have to block or wait for anything.  It hands that job off to the callback, and then it goes merrily on its way.  It's now the callback's job to finish things up.
+
+Let's see an example of this.  What do you think happens if you run the following code?
+
+```JavaScript
+console.log('one');
+
+foo().then(
+  data => console.log('two', data)
+);
+
+console.log('three');
+```
+
+It's tempting to think that JavaScript will print the following:
+
+```
+one
+two 5
+three
+```
+
+But actually it prints this:
+
+```
+one
+three
+two 5
+```
+
+And the reason is that the arrow function doesn't get called until the calling code finishes.  When JavaScript sees `foo().then(...)`, it takes whatever function you pass in to your `then` method, and saves it for later.  
+
+Even if the data is already there.  
+
+The calling code does its thing, and only when it's finished will JavaScript go back and check if the promise is settled.
+
+# Chaining promises
+
+Ok, so let's talk about another powerful feature of promises, called "promise chaining".  
+
+Remember the example from earlier, where we needed to call `foo` three times in a row? Promise chaining was invented to solve that very problem.  Basically, promise chaining means that whenever you have a promise you add as many calls to `.then` as you like.  
+
+Here is how it would look:
+
+```JavaScript
+foo
+  .then((data) => {
+    // Handle the data
+  })
+  .then(() => {
+    // Here's another callback.  Call this one next...
+  })
+  .then((data) => {
+    // And yet another callback.  Don't forget this one...
+  });
+```
+
+Essentially, these callbacks get invoked one right after the other.  You can tack on as many as you like, and they will all get called after `foo` has completed.
+
+Why would we want to do this?
+
+There are lots of reasons, but probably the most important is when you have several nested function calls, and each one of them needs to perform some kind of post-processing step before returning the result to its caller.  Let's look at an earlier example where `funcOne` calls `funcTwo`, and `funcTwo` calls `foo`:
+
+```JavaScript
+function funcOne() {
+  return funcTwo
+    .then(/* Do something after funcOne has finished */);
+}
+
+function funcTwo() {
+  return foo()
+    .then(/* process foo's result */);
+}
+
+funcOne()
+  .then(/* Do something when funcOne, funcTwo, and foo are done */);
+```
+
+Ok, so what's going on here, exactly?
+
+Three things.  Let's address them one by one.
+
+## Every call to `.then` returns a new `Promise`
+
+The first thing to learn is that every time you call a `then` method, it returns another brand-new promise. 
+
+Always.  
+
+Here's another example where I break things apart:
+
+```JavaScript
+const newPromise = foo()
+  .then(data => console.log("First promise"));
+//  ☝ Here I'm calling then() on the *first* Promise object
+
+newPromise // 👈 And this is a second *brand-new* Promise object
+  .then(() => console.log("Second promise"))
+//  ☝ This guy returns another promise, which JavaScript discards
+```
+
+There are three Promises in the code above.  
+
+1. The first `Promise` is obtained when when I call `foo` (i.e., `foo`'s return value').  
+2. The second `Promise` is returned when I call `.then()` on the first `Promise`.
+3. The third is returned when I call `.then()` the second `Promise`, but it's unused and gets thrown away.
+
+So, that was the first thing.  Now let's talk about the second.  
+
+## If your callback returns a value, it gets wrapped in the new promise.
+
+If your success callback has a return value, your `then` method will wrap it in a resolved (i.e., successful) promise.  
+```JavaScript
+foo()
+  .then(data => {
+    return 6; // 👈 This value gets wrapped into a 
+              //     new *resolved* promise
+  })
+```
+
+The same goes for your error callback.  The `then` method will consider the error handled, and will wrap anything you return from your error callback into a new resolved promise.
+
+```JavaScript
+foo()
+  .then(
+    () => { /* ... whatever */},
+    (error) => {
+      // I handle the error ... whatever
+
+      return 6; // 👈 And I return this new thing, which gets wrapped
+                //     into a new *resolved* promise.
+  })
+```
+
+It's important to note that the new `Promise` ☝ is in a **resolved** state&mdash;not a rejected state.
+
+And if you return nothing, you still get a `Promise`.  It just returns `undefined`.
+
+```JavaScript
+foo()
+  .then(data => {
+    // Do stuff with the data
+    console.log("Here is the report:", 5);
+
+    // And return nothing.  You still get a promise, and it's value 
+    // is undefined.
+  })
+```
+
+And finally, if either your success callback or your error callback return a `Promise` of their own, JavaScript will use that, instead.
+
+```JavaScript
+foo()
+  .then(data => {
+    // Do stuff with the data
+    console.log("Here is the report:", 5);
+
+    // 👇 Call foo() again, and return a second promise.
+    return foo();
+  })
+```
+
+✋ **Do not forget the `return` statement.**  You have to return the promise, explicitly.  You can't just call `foo`, or JavaScript will 
+pretend your function is a "void function" (has no return value), and will return a brand-new promise, instead.
+
+```JavaScript
+foo()
+  .then(data => {
+    // Do stuff with the data
+    console.log("Here is the report:", 5);
+
+    foo(); // 👈 This code still works, but foo's promise is
+           //     not returned.  JavaScript will assume your
+           //     function has NO RETURN VALUE, and will return
+           //     an empty resolved promise, instead.
+  })
+```
+
+So in summary, your success/error callbacks can return one of three things:
+
+1. **nothing:** your `then` function will return a <u>resolved</u> promise, containing the value `undefined`.
+2. **data of any kind:** your `then` function will return a <u>resolved</u> promise, containing the data (string, bool, number, object, etc.&mdash;whatever).
+3. **a brand-new promise:** your `then` function will just pass it along in whatever state it happens to be in, whether pending, resolved, or rejected.
+
+Now let's talk about the third and final aspect of promise chaining.
+
+## The return value of one promise callback is passed as a parameter to the next callback
+
+This is the most useful aspect of promise chaining, as it allows you to elegantly call multiple asynchronous operations one right after the other.  Remember that example at the start of this article where we needed to call `foo` three times in a row?
+
+Here is how we would do it, using promises:
+
+```JavaScript
+foo
+  .then((data) => {
+    console.log("I've called foo once:", data);
+
+    // Return the next Promise
+    return foo();
+  })
+  .then((data) => {
+    console.log("I've called foo twice:", data);
+
+    // Return the next Promise
+    return foo();
+  })
+  .then((data) => {
+    console.log("I've called foo thrice:", data);
+
+    // And now we're done.  There's no return statement, so
+    // we return undefined.
+  });
+```
+
+When you run the code above, it will print out this:
+
+```
+I've called foo once: 5
+I've called foo twice: 5
+I've called foo thrice: 5
+```
+
+But the really cool part is, I can use the result from one `.then()` and pass it to the next.  This allows all the `then` methods in a promise chain to work together.  
+
+```JavaScript
+Promise.resolve("red")
+  .then(data => data + ", yellow")
+  .then(data => data + ", green")
+  .then(data => data + ", blue")
+  .then(data => console.log(data));
+```
+
+The example above will print out this:
+
+```
+red, yellow, green, blue
+```
+
+Pretty cool, eh?
+
+This feature is really important because, going back to the example where `funcOne` calls `funcTwo`, and `funcTwo` calls `foo`, each function needs to do some kind of post-processing step before returning the result.  <u>This happens frequently when making API calls</u>.  
+
+```JavaScript
+function funcOne() {
+  return funcTwo
+    .then(response => {
+      // Wrap the response in some HTML tags
+      return `<div>${response}</div>`;
+    });
+}
+
+function funcTwo() {
+  return foo()
+    .then(data => {
+      // Format the result as a message string.
+      return `The result is ${data}`;
+    });
+}
+
+funcOne()
+  .then(result => {
+    // Display the result of the report on the page.
+    document.querySelector(".report").innerHTML = result;
+  });
+```
