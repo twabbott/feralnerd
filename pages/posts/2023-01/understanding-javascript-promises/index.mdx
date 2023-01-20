@@ -5,10 +5,10 @@ import image from "./hero.jpg";
 import promiseDiagram from "./promise-diagram.png";
 
 export const frontmatter = {
-    isPublished: false,
+    isPublished: true,
     title: "Understanding Promises in JavaScript",
     date: "2023-01-14",
-    excerpt: "Let's talk about promises and how they work.  We're going to do a deep dive using a very basic example with pictures.",
+    excerpt: "Let's talk about JavaScript promises.  We're going to do a deep dive using a very basic examples that build upon one and other, and explain how the system behaves.  Then we'll follow up with a real-world example using a public REST API.  By the end of this post you should have a solid understanding of the core concepts.",
     image,
     imageAlt: "Hero image",
     imageCredit: `Photo by <a href="https://unsplash.com/@cytonn_photography?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Cytonn Photography</a> on <a href="https://unsplash.com/photos/vWchRczcQwM?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>`,
@@ -18,6 +18,10 @@ export default ({children}) => (<Frontmatter>{children}</Frontmatter>);
 
 Promises were invented as a way for JavaScript to manage callback functions that are needed when performing some kind of long-running task.
 
+> ✋ Note: Promises remain an integral part of ES6 today, but the pattern of working directly with promises as described in this article is considered low-level, and is no longer widely used. As of ES7, it is recommended that you use `async` and `await`, instead.  
+
+> That said, having a firm grasp of what promises do will give you a much better understanding of `async` and `await`, as these two keywords are built on top of promises.
+
 # The problem
 
 Imagine you have a webpage, and it needs to do something like:
@@ -25,7 +29,20 @@ Imagine you have a webpage, and it needs to do something like:
 * make a request to fetch some data that you want to show on the page.
 * set a timer, then do something after it has elapsed.
 
-All of these tasks are managed in JavaScript, using callbacks.  Suppose we have a function called `foo`, which needs to fetch a report that takes about 10 seconds to run, then returns some data.  For the purposes of this example, we'll return the number 5. 
+What you don't want to do is make JavaScript wait until the response comes back, because it will make the webpage freeze.  And to put it mildly, users won't like that.
+
+To get around this problem, JavaScript uses callback functions.  This is a common technique used in nearly all programming languages since long before the internet was a thing.
+
+What's a callback function?  Consider this example using `setTimeout`, where we wait five seconds, then pop an alert modal with a message.
+
+```JavaScript
+setTimeout(
+  () => alert("Your time is up!"), // 👈 This is a callback function.
+  5000
+)
+```
+
+Suppose we have a function called `foo`, which needs to fetch a report that takes about 10 seconds to run, then returns some data.  For the purposes of this example, we'll return the number 5. 
 
 ```JavaScript
 function foo(myCallback) {
@@ -56,7 +73,7 @@ foo(myCallback);
 
 This works pretty well for most cases, but what do you do if there's an error?  In this example there is no way to tell the callback function that something is wrong.  
 
-One technique to get around this problem is to add a second parameter to `foo`, which is an error callback.
+One technique to get around this problem is to add a second parameter to `foo`, which is an error callback:
 
 ```JavaScript
 function foo(successCallback, errorCallback) {
@@ -97,7 +114,7 @@ Now imagine adding error callbacks into all that ☝, and you begin to see the l
 
 Promises have been around for a while now, but they haven't been a standard part of JavaScript until ES6.  So, how do they work?
 
-Instead of passing in callbacks, your funciton returns a promise.  For the purpose of our example, `foo` is going to do the following.
+Instead of requiring the caller to pass in callbacks, your funciton merely returns a promise.  For the purpose of our example, `foo` is going to do the following:
 
 ```JavaScript
 function foo() {
@@ -107,9 +124,9 @@ function foo() {
 
 So, instead of requiring us to pass in success/error callback functions, `foo` now returns this new thing, called a `Promise`.
 
-> NOTE: I'm not going to go into an explanation of how to create a new `Promise` object, because that pattern way too low-level, and it's well beyond the scope of this article.  I will explain what the `resolve` function does later on in this article.  
+> NOTE: I'm not going to go into an explanation of how to create a new `Promise` object, because that pattern way too low-level, and it's well beyond the scope of this article.  I will explain what the `resolve` function does in just a sec.  
 
-This `Promise` object behaves like a handle, and it helps you keep track of what's going on inside of `foo`.  Here is how we call `foo`;
+This `Promise` object behaves like a handle, and it helps you keep track of what's going on inside of `foo`.  Here is how we call `foo`:
 
 ```JavaScript
 const myPromise = foo();
@@ -128,6 +145,19 @@ Each `Promise` begins life in a "pending" state, which means the operation hasn'
 
 A handy trick that I use to remember these three terms is to think of a lawsuit.  Two parties are in dispute and they go to court, and their case is "pending" trial.  At some point the judge will render a decision, and then the case is now "resolved".  If the judge doesn't like the case, or thinks it's not ready for trial, he or she can throw it out, and it's "rejected".  
 
+The `Promise` class has two static methods for creating an instance of a <u>settled</u> `Promise`.  These are:
+
+* <b>`Promise.resolve(...)`:</b> creates a new resolved (successful) promise.
+* <b>`Promise.reject(...)`:</b> creates a new rejected (un-successful / error) promise.
+
+Both of these static methods can take a single parameter, which is a data payload.  Either method takes the data you pass in, and wraps it in a new resolved/rejected promise.
+
+These methods are useful in situations where you have a piece of data, and you need to wrap it in a promise.  Here is how you would create an error `Promise`:
+
+```JavaScript
+Promise.reject("Baby did a bad, bad thing.");
+```
+
 # Getting your results
 
 Ok, so now you have a promise object, how do you get the results?
@@ -144,7 +174,9 @@ foo().then(
 );
 ```
 
-If you want to handle errors, Your `then` function can also take an error callback.  The error callback takes a single parameter which contains the error.  Here is how you would use it:
+If you want to handle errors, Your `then` function can also take an error callback.  The error callback takes a single parameter which contains the error.  
+
+Here is how you would use it:
 
 ```JavaScript
 foo().then(
@@ -178,7 +210,11 @@ const myPromise = foo();
 myPromise.then((data) => console.log('Here is the data:', data));
 ```
 
-Here's another example.  Function calls get wrapped inside function calls all the time.  Imagine the actual call to `foo` is three levels deep.  You never see `foo`; instead, you call `funcOne`, and `funcOne` uses a library function called `funcTwo`, and it's `funcTwo` which actually handles the call to `foo`.  If you were using straight callbacks, here is what you would have to code up:
+Here's another example.  Function calls get wrapped inside function calls all the time, right?  
+
+Imagine the actual call to `foo` is three levels deep.  You never see `foo`; instead, you call `funcOne`, and `funcOne` uses a library function called `funcTwo`, and it's `funcTwo` which actually handles the call to `foo`.  
+
+If you were using straight callbacks, here is what you would have to code up:
 
 ```JavaScript
 function funcOne(success, error) {
@@ -190,7 +226,7 @@ function funcTwo(success, error) {
 }
 ```
 
-You would have to pass your callbacks down to every function in the call sequence.  Let's see how much cleaner things are if `foo` returns a `Promise`, instead.  
+You would have to pass your callbacks down to every function in the call sequence.  Let's see how much cleaner things are if `foo` returns a `Promise`, instead:
 
 ```JavaScript
 function funcOne() {
@@ -206,7 +242,7 @@ You didn't have to do anything special to either `funcOne` or `funcTwo`, they ju
 
 The key is this: they don't need to know that `foo` was special in any way, whatsoever.  All they had to do was pass the return value back to the caller.
 
-It's the caller's responsibility to deal with the result of `foo`.
+It's the caller's responsibility to deal with the result of `foo`:
 
 ```JavaScript
 funcOne()
@@ -231,7 +267,13 @@ It's important to understand that when you call a `then` method, **JavaScript do
 
 You can't ever return the actual value back to the calling code.  
 
-Why not?  Because the calling code runs to completion.  It doesn't wait for `foo` to complete&mdash;which is the entire point of promises.  The calling code doesn't have to block or wait for anything.  It hands that job off to the callback, and then it goes merrily on its way.  It's now the callback's job to finish things up.
+Why not?  
+
+Because the calling code moves on with life and never waits around.  It's done.  It's gone.  It's made its contribution to the world, and now it's ready for the next life adventure.
+
+Remember that JavaScript was built to run on a single thread.  So, the whole idea of promises is to help a single thread efficiently manage multiple tasks.  So, the thread executes the calling code, and lets it run to the end of whatever it was doing.  Only once it's completed will JavaScript check to see if any promises are settled, and begin calling their callbacks, one by one.
+
+In conclusion, JavaScript doesn't wait for `foo` to complete&mdash;which is the entire point of promises.  The calling code doesn't have to block or wait for anything.  It hands that job off to the callback, and then it goes merrily on its way.  It's now the callback's job to finish things up.
 
 Let's see an example of this.  What do you think happens if you run the following code?
 
@@ -261,7 +303,7 @@ three
 two 5
 ```
 
-And the reason is that the arrow function doesn't get called until the calling code finishes.  When JavaScript sees `foo().then(...)`, it takes whatever function you pass in to your `then` method, and saves it for later.  
+And the reason is that the arrow function doesn't get called until the calling code finishes.  When JavaScript sees `foo().then(...)`, it takes whatever function you pass in to your `then` method, and <u>saves it for later</u>.  
 
 Even if the data is already there.  
 
@@ -271,7 +313,7 @@ The calling code does its thing, and only when it's finished will JavaScript go 
 
 Ok, so let's talk about another powerful feature of promises, called "promise chaining".  
 
-Remember the example from earlier, where we needed to call `foo` three times in a row? Promise chaining was invented to solve that very problem.  Basically, promise chaining means that whenever you have a promise you add as many calls to `.then` as you like.  
+Remember the example from earlier, where we needed to call `foo` three times in a row? Promise chaining was invented to solve that very problem.  Basically, promise chaining means that whenever you have a promise you can add as many calls to `.then` as you like.  
 
 Here is how it would look:
 
@@ -292,7 +334,9 @@ Essentially, these callbacks get invoked one right after the other.  You can tac
 
 Why would we want to do this?
 
-There are lots of reasons, but probably the most important is when you have several nested function calls, and each one of them needs to perform some kind of post-processing step before returning the result to its caller.  Let's look at an earlier example where `funcOne` calls `funcTwo`, and `funcTwo` calls `foo`:
+There are lots of reasons, but probably the most important is when you have several nested function calls, and each one of them needs to perform some kind of post-processing step before returning the result to its caller.  
+
+Let's look at an earlier example where `funcOne` calls `funcTwo`, and `funcTwo` calls `foo`:
 
 ```JavaScript
 function funcOne() {
@@ -337,7 +381,19 @@ There are three Promises in the code above.
 2. The second `Promise` is returned when I call `.then()` on the first `Promise`.
 3. The third is returned when I call `.then()` the second `Promise`, but it's unused and gets thrown away.
 
+And that, in a nutshell, is why you can keep doing this:
+
+```JavaScript
+foo()
+  .then( ... )
+  .then( ... )
+  .then( ... )
+  .then( ... )
+  .then( ... ); // I can keep doing this, all day!
+```
+
 So, that was the first thing.  Now let's talk about the second.  
+
 
 ## If your callback returns a value, it gets wrapped in the new promise.
 
@@ -454,6 +510,8 @@ I've called foo thrice: 5
 
 But the really cool part is, I can use the result from one `.then()` and pass it to the next.  This allows all the `then` methods in a promise chain to work together.  
 
+In this example, I am successively building up a string.  Each call to `then` adds a new color onto the end:
+
 ```JavaScript
 Promise.resolve("red")
   .then(data => data + ", yellow")
@@ -472,9 +530,11 @@ Pretty cool, eh?
 
 This feature is really important because, going back to the example where `funcOne` calls `funcTwo`, and `funcTwo` calls `foo`, each function needs to do some kind of post-processing step before returning the result.  <u>This happens frequently when making API calls</u>.  
 
+Here is an example where we take the result from `foo` and display it on a webpage.  Each promise callback takes care of one specific aspect of the process:
+
 ```JavaScript
 function funcOne() {
-  return funcTwo
+  return funcTwo()
     .then(response => {
       // Wrap the response in some HTML tags
       return `<div>${response}</div>`;
@@ -495,3 +555,215 @@ funcOne()
     document.querySelector(".report").innerHTML = result;
   });
 ```
+
+# Error handling
+
+Let's talk about error handling.  The `Promise` class's `then` method comes with some pretty robust error handling built in.  It allows you to catch an error right away and handle it.  
+
+Here is a basic example:
+
+```JavaScript
+Promise.reject("BLAAAARG!! 😡💢")
+  .then(
+    () => console.log("Success--but we know that will never happen."),
+    (error) => console.log("There was an attempt: " + error)
+  )//  ☝ Error handler ☝
+```
+
+The example above will print out this:
+
+```
+There was an attempt: BLAAAARG!! 😡💢
+```
+
+This system gives you a lot of flexibility in deciding how and when you want to handle errors.  If you happen to have a long chain of `then` calls, you can put an error handler in the very last one, and it will act like the `catch` clause in a try-catch statement.
+
+```JavaScript
+Promise.reject("BLAAAARG!! 😡💢")
+  .then(
+    () => console.log("Success ... but is it?")
+    /* 🤷‍♀️ no error handler here 🤷‍♂️ */
+  )
+  .then(
+    () => console.log("Will this ever get called?"),
+    (error) => console.log("Second error handler: " + error)
+  )
+```
+
+The previous example prints out this:
+
+```
+Second error handler: BLAAAARG!! 😡💢
+```
+
+So, this works pretty well.  That said, the only complaint I have is that having a `then` with **two** callbacks is kind of a pain to read, am I right?
+
+It's so easy to miss that little comma at the end of your success handler.  And if you have curly braces&mdash;I don't know about you, but I always have to double-check and tripple-check, and I'll still miss a } from time to time.
+
+Well, the JavaScript people seemed to think this was a problem as well, so they introduced two new methods to the `Promise` class, which are basically fancy wrappers for `then`.
+
+The first is called `catch`, and it does literally what you think it should&mdash;it acts like the `catch` clause in a try-catch statement.  And if you need to, you can even tack a `then` clause on the end (afterwards), because the `catch` method will handle the error and return a new `Promise`.
+
+```JavaScript
+Promise.reject("BLAAAARG!! 😡💢")
+  .then(
+    () => console.log("This never gets seen.")
+  )
+  .then(
+    () => console.log("This never gets seen, either.")
+  )
+  .catch(
+    (error) => console.log("Error: " + error)
+  )
+```
+
+The other new method is called `finally` and it also does exactly what you'd expect it to do.  Your `finally` callback is **guaranteed** to get called, whether there is an error or not.
+
+```JavaScript
+Promise.reject("Very mad")
+  .then(_ => console.log("Never gets called"))
+  .finally(_ => console.log("💯 Guaranteed to get called 💯"))
+  .then(_ => console.log("Never gets called, either"))
+  .catch(error => console.log("Error: " + error));
+```
+
+> ✋ Note that the callback for the `finally` method takes no parameters.  So there is literally no way to tell if an error happened or not.
+
+The previous example prints out this:
+
+```
+💯 Guaranteed to get called 💯
+Error: Very mad
+```
+
+And the really cool thing is that because `Promises` allow you to have an asynchronous operation in one place and do all the handling in another place, You can nest your function calls as deep as you like, and have a single `.catch()` at the top-most function.  This keeps everything super clean.
+
+```JavaScript
+function funcOne() {
+  return funcTwo
+    .then( ... );
+}
+
+function funcTwo() {
+  return foo()
+    .then( ... );
+}
+
+funcOne()
+  .then(result => 
+    document.querySelector(".report").innerHTML = result;
+  );
+  .catch(error => 
+    document.querySelector(".error").innerHTML = error;
+  )
+  .finally(_ =>
+    console.log("Moving along...");
+  );
+```
+
+So much more intentional.  So much easier to read.
+
+# Exception handling
+
+You might be asking yourself, what happens if my code throws an exception inside my `then` method's resolve callback?
+
+```JavaScript
+foo()
+  .then(() => {
+    throw new Error("Yeeeet! 💢"); // 👈 What happens here?
+  })
+```
+
+You might be tempted to add an an error callback, like so:
+
+```JavaScript
+foo()
+  .then(() => {
+      throw new Error("Yeeeet! 💢"); // 👈 What happens here?
+    },
+    (err) => console.error(err);
+  ) // ☝ Will this work?
+```
+
+This won't work, because your reject callback is for the <u>previous `Promise`</u>, not the current one.  In order to handle any exceptions, you'd need a <u>second</u> `then` clause, or (better yet) you'd need to add a `catch`.
+
+This will work just fine:
+
+```JavaScript
+foo()
+  .then(() => {
+      throw new Error("Yeeeet! 💢");
+    },
+  )
+  .catch(err =>
+    console.error(err)  // 👈 All exceptions get handled here.
+  )
+```
+
+# Real-world example
+
+Ok, now with all that in mind, let's take a look at a real-world example using a public API.  We're going to use another JavaScript function, called `fetch`, which (aptly named) is used for fetching data using REST.  The `fetch` function is a good example of promises, because it's very low-level&mdash;and because it is so low level, it requires us to do two asynchronous calls back to back:
+
+1. The first call is to perform the REST request.
+2. The second call is to retrieve all of the data in the response, which for really long requests can come in chunks and can take a long time.
+
+The API we're going to hit is the Star Wars API (called "SWAPI", for short).  For more infomration about this API, you can go to [swapi.dev](https://swapi.dev/).
+
+We're going to go to the `people` endpoint, and fetch the first ten Star Wars characters from their database, and print them out.
+
+The `fetch` function is pretty easy to use.  You just pass in a URL, and it does a `GET`.  The return value is a `Promise` that contains response object, which tells you how the request went.
+
+```JavaScript
+fetch("https://someurl.com/some/path")
+  .then(response => {
+    // Check for errors and stuff
+  })
+```
+
+Once you have a response, you have to check the status code. If the request was successful, it'll be 200, which is the HTTP status code for "Ok".  It's probably easier to just throw an exception if it's not a 200, that way the caller can deal with the problem.
+
+Once you've verified the status code, you have to load the JSON.  This can take a long time, so JavaScript offloads that parsing task to the browser, and you get a promise to let you know when the parsing is complete.
+
+```JavaScript
+fetch('https://swapi.dev/api/people/')
+  .then((response) => {
+    if (response.status !== 200) {
+      throw new Error(`${response.status} ${response.statusMessage}`);
+    }
+
+    return response.json(); // 👈 return the next promise
+  })
+  .then((data) => 
+    data.results.forEach((item) => console.log(item.name))
+  )
+  .catch(error => 
+    console.error(error)
+  );
+```
+
+And when you run it, you get the first page of results:
+
+```
+Luke Skywalker
+C-3PO
+R2-D2
+Darth Vader
+Leia Organa
+Owen Lars
+Beru Whitesun lars
+R5-D4
+Biggs Darklighter
+Obi-Wan Kenobi
+```
+
+LOL, R5-D4 ... what a cut-up!  Always the life of a party.  
+
+Not sure where my man Jar Jar Binks went, though.  "Misa thinkin' issa onna nother page!"
+
+Enough of that.
+
+# Conclusion
+
+So this was a pretty in-depth article.  I don't expect the whole thing to make sense unless you've spent a lot of time working with promises.  All of these exapmles will run, so open up your console window, and paste them into your browser one by one.  The best way to learn is by experimenting.
+
+And even though this pattern is a little outdated, it's still used all over the place.  On top of that, people are still getting used to `async` and `await`, which can be a bit of a mystery if you haven't taken the time to read up.
