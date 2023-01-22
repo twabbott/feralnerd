@@ -69,7 +69,6 @@ function PageHeader() {
       <nav>
         <div className="left">
           <Link href="/">
-            {' '}
             <Image
               src={logo}
               width="48"

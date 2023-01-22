@@ -6,6 +6,7 @@ See if you can add better syntax highlighting with [react-syntax-highlighter](ht
 
 ## BUGS:
 
+- For some reason, the suggested posts are picking up un-published articles
 - Front page
   - First three articles should switch to small view if the page width goes below the breakpoint
     - We can fix this by rendering both the big summary _and_ the little summary, then use CSS to control which one is shown/hidden.
@@ -16,6 +17,9 @@ See if you can add better syntax highlighting with [react-syntax-highlighter](ht
 
 ## TODO:
 
+- Come up with a way for a folder to have multiple posts in it
+  - Main article is called `index.mdx`.
+  - Supporting articles are called `whatever-you-want.mdx`, and they all show up on the front page.
 - Come up with a way to switch themes
   - themes live in the styles folder, and end with .theme.js
   - Have a dropdown on the footer that you can use to switch the theme
