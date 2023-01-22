@@ -8,6 +8,10 @@ export const SocialApps = {
 
 export const siteMap = {
   title: 'The Feral Nerd',
+  about: {
+    name: 'Tom Abbott',
+    description: 'Principle Full-stack Developer',
+  },
   menu: [
     {
       id: 1,
