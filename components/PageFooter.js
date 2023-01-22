@@ -80,11 +80,16 @@ export default function PageFooter() {
       <div className="footer">
         <div className="aboutMe">
           <div className="photo">
-            <Image src={portrait} width={120} height={160} alt="Tom Abbott" />
+            <Image
+              src={portrait}
+              width={120}
+              height={160}
+              alt={siteMap.about.name}
+            />
           </div>
           <div>
-            <h1>Tom Abbott</h1>
-            <p>Principle front-end developer</p>
+            <h1>{siteMap.about.name}</h1>
+            <p>{siteMap.about.description}</p>
           </div>
         </div>
         <div>

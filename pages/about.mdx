@@ -6,23 +6,21 @@ import Avatar from "@/components/Avatar";
 import Page from "@/components/Page";
 
 <Head>
-    <title>About Me - {siteMap.title}</title>
+    <title>About {siteMap.about.name} - {siteMap.title}</title>
 </Head>
 
 
 <Avatar
     src="/images/avatar-photo.png"
-    alt="avatar"
+    alt={siteMap.about.name}
     width={150}
     height={150}
     className="avatar"
 />
 
-export default ({children}) => (<Page title="About Me">{children}</Page>);
+export default ({children}) => (<Page title={`About ${siteMap.about.name}`}>{children}</Page>);
 
 # About Me
-
-How are y'all doing? 👋
 
 I am <strong>Tom Abbott</strong>. I've been coding since the 10th grade in the 80s, which means I've probably been doing this way too long.  But hey, anything you love doing is worth over-doing, right?  I got my start writing video games, with the grand dream that someday I would run my own game startup.
 
