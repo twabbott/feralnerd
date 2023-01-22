@@ -8,6 +8,10 @@ export const SocialApps = {
 
 export const siteMap = {
   title: 'Blog Rocket',
+  about: {
+    name: 'Jane Doe',
+    description: 'Full Stack Developer',
+  },
   menu: [
     {
       id: 1,

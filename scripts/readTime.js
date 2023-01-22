@@ -42,5 +42,7 @@ export default function getReadTime(pathname) {
 
   fileContents = fileContents.substring(fileContents.indexOf('\n', bannerPos));
 
-  return readTime(fileContents);
+  const minutes = readTime(fileContents);
+  console.log(`reading time: ${pathname} - ${minutes} minutes`);
+  return minutes;
 }

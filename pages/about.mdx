@@ -6,23 +6,23 @@ import Avatar from "@/components/Avatar";
 import Page from "@/components/Page";
 
 <Head>
-    <title>About Me - {siteMap.title}</title>
+    <title>About {siteMap.about.name} - {siteMap.title}</title>
 </Head>
 
 
 <Avatar
     src="/images/avatar-photo.png"
-    alt="john doe avatar"
+    alt={siteMap.about.name}
     width={150}
     height={150}
     className="avatar"
 />
 
-export default ({children}) => (<Page title="About John Doe">{children}</Page>);
+export default ({children}) => (<Page title={`About ${siteMap.about.name}`}>{children}</Page>);
 
 # About Me
 
-Hey, I am <strong>John Doe</strong>. I love coding. Lorem ipsum dolor
+Hey, I am <strong>{siteMap.about.name}</strong>. I love coding. Lorem ipsum dolor
 sit, amet consectetur adipisicing elit. Reiciendis commodi numquam
 incidunt blanditiis quibusdam atque natus inventore sunt autem iusto.
 
