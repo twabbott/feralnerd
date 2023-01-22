@@ -1,0 +1,112 @@
+import Image from 'next/image';
+import Frontmatter from "@/components/Frontmatter.js";
+
+import image from "./hero.jpg";
+import synchronousFunctionCall from "./synchronous-function-call.png";
+import asynchronousFunctionCall from "./asynchronous-function-call.png";
+
+export const frontmatter = {
+    isPublished: false,
+    title: "Understanding Promises in JavaScript",
+    date: "2023-01-14",
+    excerpt: "Let's talk about promises and how they work.  We're going to do a deep dive using a very basic example with pictures.",
+    image,
+    imageAlt: "Hero image",
+    imageCredit: `Photo by <a href="https://unsplash.com/@cytonn_photography?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Cytonn Photography</a> on <a href="https://unsplash.com/photos/vWchRczcQwM?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>`,
+}
+
+export default ({children}) => (<Frontmatter>{children}</Frontmatter>);
+
+Before I can get too far into this article I want to back up and talk about two types of functions:
+
+1. <b>Synchronous function:</b> the normal kind that you use, in everyday programming.
+2. <b>Asynchronous function:</b> it's like a normal function, but ... it's "asynchronous".
+
+# Synchronous functions
+
+Let's talk about what happens when you call a synchronous function. In the image below, the black boxes represent steps that the computer takes when executing your program.  At some point, lets suppose your program wants to call function `foo`.   What happens?  
+
+Well, the computer stops what it was doing, sets it aside, and control jumps into `foo`.  The computer then does some stuff, and when all those steps are complete it jumps back to what it was doing before, and picks up right where it left off.
+
+<Image src={synchronousFunctionCall} alt="Diagram of a synchronous function call" className="indentedImage" />
+
+Key points:
+
+* JavaScript pauses whatever it was doing, and jumps to the start of `foo`.
+* Function `foo` <u>runs to completion</u>; meanwhile, whatever function you were previously in <u>waits</u>.
+* When `foo` returns, control resumes at the point where JavaScript left off.
+
+We use the term "synchronous" because the caller and the callee (function `foo`) work in lock-step.  They're "in sync".  This is pretty much how every computer language behaves, since programming languages were invented.
+
+Basic stuff.
+
+And most of the time this isn't a problem, at all.  But every now and then your webpage has to call a function that can take a long time to complete, such as:
+
+* Making a network call to fetch some data
+* Waiting for user input (typing on the keyboard, or clicking a button)
+* Performing a complex calculation, or an expensive operation on a list of data
+* Or just pausing, to give the user a chance to complete a task they want to do.
+
+If you do any of these tasks synchronously (like you normally would), your webpage will freeze, and the user won't be able to do anything.  If the delay is small then it's not much of a problem, and you can live with it.  But if the delay takes a really long time, then it will make your webpage unusable.
+
+# Using callback functions
+
+People have been dealing with this problem for a long time now.  One pattern that has worked well is to use what's called a callback-function.  In the case of function `foo`, we add a new parameter, which will be a funciton that we want JavaScript to call once `foo`'s work is complete.  If `foo` has a return value, we would pass it in, when calling the callback.
+
+```JavaScript
+funciton foo(myCallback) {
+    // Doing lots of stuff...
+
+    // Very busy in here...
+
+    // Yeah, it's gonna be a while. 😅
+
+    // Ok, I'm done.
+    myCallback(data);
+
+    // no return statement.
+}
+```
+
+Here is how we would call `foo`:
+
+```JavaScript
+// Stuff to do, afterwords
+function myCallback(data) {
+    // Display the data
+
+    alert('Task has completed!');
+}
+
+// Now let's call foo
+foo(myCallback)
+```
+
+We do this all the time in JavaScript.  Two very common use-cases are:
+
+* Setting a button-click handler
+* Setting a timer
+
+You've probably done this plenty of times:
+
+```JavaScript
+setTimeout(() => {
+        console.log('Time\'s up!')
+    }, 
+    5000
+);
+```
+
+# So, what is an asynchronous function?
+
+An asynchronous function is a special kind of function that lets JavaScript handle a task in the background, without needing a callback function.  
+
+Using the example above, let's suppose that `foo` is going to fetch a report that takes about ten seconds to load.  If `foo` was asynchronous, JavaScript could handle that request in the background.  Foo could validate any parameters that were passed in, initiate the request, then return immediately.  The calling function could then resume doing what it was doing, and finish up without any wait at all. 
+
+Then, at a later point in time when `foo` was ready to show the report, it could do so as a separate operation. 
+
+Let's see how this would look using the flowchart example from above.
+
+<Image src={asynchronousFunctionCall} alt="Diagram of an asynchronous function call" className="indentedImage" />
+
+In JavaScript, we write asynchronous functions, using two new keywords introduced in ES7 (in 2006), called `async` and `await`, and it is all built on top of a another recent enhancement to JavaScript, called promises.

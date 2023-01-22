@@ -8,7 +8,7 @@ import { responsiveContainer } from '../styles/mixins';
 import ReadingTime from './ReadingTime';
 import { useFrontmatter } from './SiteInfoContext';
 import SuggestedReading from './SuggestedReading';
-import logo from '../public/images/feral-nerd.png';
+import logo from '../public/images/logo.png';
 
 const Article = styled.article`
   ${responsiveContainer}

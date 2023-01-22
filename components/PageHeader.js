@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { siteMap } from '../scripts/siteMap';
 import { responsiveContainer } from '../styles/mixins';
-import logo from '../public/images/feral-nerd.png';
+import logo from '../public/images/logo.png';
 
 const Container = styled.header`
   background-color: ${(props) => props.theme.colors.bgSecondary};

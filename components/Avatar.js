@@ -21,16 +21,3 @@ function Avatar(props) {
 }
 
 export default Avatar;
-
-fetch('https://swapi.dev/api/people/')
-  .then((response) => {
-    const { status, statusMessage } = response;
-
-    if (status !== 200) {
-      throw new Error(`Error fetching data ${status} ${statusMessage}`);
-    }
-
-    return response.json(); // 👈 return the next promise
-  })
-  .then((data) => data.results.forEach((item) => console.log(item.name)))
-  .catch((error) => console.error(error));
