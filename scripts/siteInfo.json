@@ -1,10 +1,30 @@
 {
   "posts": [
     {
+      "filename": "./2023-01/creating-a-new-promise/index.mdx",
+      "link": "/posts/2023-01/creating-a-new-promise",
+      "slug": "creating-a-new-promise",
+      "readingTime": 6,
+      "isPublished": true,
+      "title": "Creating a New Promise",
+      "date": "2023-01-22",
+      "excerpt": "In this post I'll take you through a deep dive of what a Promise is and how to create a new promise.  I'll finish up by giving an example of how you can take any asynhronous function call that accepts a callback and turn it into a function that uses callbacks.",
+      "image": {
+        "src": "/_next/static/media/hero.df004b95.jpg",
+        "height": 1080,
+        "width": 1920,
+        "blurDataURL": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhero.df004b95.jpg&w=8&q=70",
+        "blurWidth": 8,
+        "blurHeight": 5
+      },
+      "imageAlt": "Hero image",
+      "imageCredit": "Photo by <a href=\"https://unsplash.com/@weekendw0rrier?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Ryan Franco</a> on <a href=\"https://unsplash.com/photos/C6YVD4keMJY?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Unsplash</a>"
+    },
+    {
       "filename": "./2023-01/understanding-javascript-promises/index.mdx",
       "link": "/posts/2023-01/understanding-javascript-promises",
       "slug": "understanding-javascript-promises",
-      "readingTime": 13,
+      "readingTime": 14,
       "isPublished": true,
       "title": "Understanding Promises in JavaScript",
       "date": "2023-01-14",

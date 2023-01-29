@@ -1,0 +1,478 @@
+import Image from 'next/image';
+import Frontmatter from "@/components/Frontmatter.js";
+
+import image from "./hero.jpg";
+import promiseDiagram from "./promise-diagram.png";
+import ooeStep1 from "./ooeStep1.png";
+import ooeStep2 from "./ooeStep2.png";
+import ooeStep3 from "./ooeStep3.png";
+import ooeStep4 from "./ooeStep4.png";
+import ooeStep5 from "./ooeStep5.png";
+
+export const frontmatter = {
+    isPublished: true,
+    title: "Creating a New Promise",
+    date: "2023-01-22",
+    excerpt: "In this post I'll take you through a deep dive of what a Promise is and how to create a new promise.  I'll finish up by giving an example of how you can take any asynhronous function call that accepts a callback and turn it into a function that uses callbacks.",
+    image,
+    imageAlt: "Hero image",
+    imageCredit: `Photo by <a href="https://unsplash.com/@weekendw0rrier?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Ryan Franco</a> on <a href="https://unsplash.com/photos/C6YVD4keMJY?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>`,
+}
+
+export default ({children}) => (<Frontmatter>{children}</Frontmatter>);
+
+# Introducing promises
+
+Promises have been around for a while now, but they haven't been a standard part of JavaScript until ES6.  But before we dive into the details, I need to give a handful of caveats.  
+
+First, if you're not already familiar with what a `Promise` is, or how to use a function that returns a `Promise`, you should read my other article: [Understanding JavaScript Promises](/posts/2023-01/understanding-javascript-promises).
+
+Second, what I'm about to teach you is very low level, and shouldn't be used unless you know <b>why</b> you would need to use it.  I've seen many people create promises when they should be doing something much simpler, and all they end up doing is making their code over-complicated and unreadable.
+
+I'll explain when you should use what I'm about to show you at the end of this article.
+
+# A review
+
+Let's start off with a brief review of Promises.  A `Promise` is an object that JavaScript uses to keep track of the state of an asynchronous task.  An asynchronous task is any task that can potentially take a long time to execute.  Here are some examples.
+
+* Fetching data by making a REST API call
+* Talking to a database
+* Accessing data from the file system.
+
+Using a `Promise` object allows JavaScript to not block or pause or wait around.  Instead, your program sets up the operation, and then you provide callbacks to take care of the result when it's ready.
+
+A `Promise` object has three "states".  You can think of it kind of like a flowchart in the image below (reading left to right).
+
+<Image src={promiseDiagram} alt="Diagram of a promise" className="indentedImage" />
+
+Each `Promise` begins life in a "pending" state, which means the operation hasn't completed yet, and we're still waiting for it.  Once the operation has completed, the `Promise` is considered "settled", and it is in one of two states:
+
+* <b>resolved:</b> the operation has successfully completed, and the results (if any) are ready to use.
+* <b>rejected:</b> there was an error
+
+# Example
+
+I'm going to pose a thought experiement, and we're going to use JavaScript and Promises to represent how to solve the problem.
+
+Suppose you're a kid and you want a phone, so you go to your mom and you ask if she will get you one.  You come up with all sorts of reasons why you ought to have one, and you finish up by saying, "pretty-pleeeeease?"
+
+Your mom smiles.  She doesn't say "no," but she doesn't say "yes," either.  She needs time to think about it.  
+
+"Tell you what," she says.  "You be a good girl/boy, you do your homework and get good grades, do your chores like I say, and I might just get you a phone.  But if you're bad then no phone for you!"
+
+The reality of the situation is that your mom *wants* to give you a phone, but she doesn't know if she can afford it.  She needs to buy some time, so she puts you off and tells you that she'll think about it.
+
+So there you are.  Stuck in suspense, for a whole week.  Life is so unfair.
+
+We can model this situation using a bit of JavaScript logic.  Let's give it 50/50 odds.
+
+```javascript
+// Flip a coin to see what mom decides.
+const isMomHappy = Math.random() >= 0.5;
+
+if (isMomHappy) {
+  console.log("I'm getting a phone! 🎉  🤜🤛");
+} else {
+  console.log('I blew it.  Sad trombone.  📯 😭');
+}
+```
+
+Look good so far?
+
+So that's it.  We have our asynchronous operation, and now we're ready to use it to create a new `Promise`.
+
+To start off, we need to wrap this logic in a `Promise` callback.  This is a special function that basically looks like this:
+
+```JavaScript
+(resolve, reject) => {
+    // do asynchronous stuff, here...
+}
+```
+
+The two parameters are functions, which JavaScript will pass to you:
+
+- <b>resolve:</b> you call this function when the asynchronous operation has successfully completed, and you are ready to return the result.
+- <b>reject:</b> you call this function if there were any problems, and you want to return an error.
+
+Ok, so let's see how we would wrap the logic of our example:
+
+```JavaScript
+(resolve, reject) => {
+  // Flip a coin to see what mom decides.
+  const isMomHappy = Math.random() >= 0.5;
+
+  if (isMomHappy) {
+    resolve("I'm getting a phone! 🎉  🤜🤛");
+  } else {
+    reject('I blew it.  Sad trombone.  📯 😭');
+  }
+}
+```
+
+See how it works?  Instead of calling `console.log`, we're invoking the `resolve` and `reject` callbacks that JavaScript will give us.
+
+The important thing to remember is that **you cannot return a value**.  You <u>must</u> use either the `resolve` callback or the `reject` callback.  
+
+You <u>CANNOT</u> do this: 👇 
+
+```JavaScript
+(resolve, reject) => {
+  // Flip a coin to see what mom decides.
+  const isMomHappy = Math.random() >= 0.5;
+
+  if (isMomHappy) {
+    return "I'm getting a phone! 🎉  🤜🤛";
+    // ☝ YOU CANNOT USE A RETURN STATEMENT HERE!
+  } else {
+    return 'I blew it.  Sad trombone.  📯 😭';
+    // ☝ YOU CANNOT USE A RETURN STATEMENT HERE!
+  }
+}
+```
+
+If you try to use a `return` statement, or if you somehow forget to call `resolve` or `reject`, and you try to return a value, your promise will hang and never move to a settled state.
+
+Will JavaScript lock up?
+
+No.  JavaScript will just forget about your promise, and move on with life.
+
+Ok, enough about that.
+
+So, now that we have our callback, the last thing that we need to do is pass it in to the `Promise` constructor.  And with that, we have a brand-new `Promise` object:
+
+```JavaScript
+const phonePromise = new Promise((resolve, reject) => {
+  // Flip a coin to see what mom decides.
+  const isMomHappy = Math.random() >= 0.5;
+
+  if (isMomHappy) {
+    resolve("I'm getting a phone! 🎉  🤜🤛");
+  } else {
+    reject('I blew it.  Sad trombone.  📯 😭');
+  }
+});
+```
+
+And that's it, in a nutshell.  Next, we should talk about some best practices.
+
+# Best practices
+
+The first thing you want to do is encapsulate all the above logic in a wrapper-function.  Why?  So that the caller doesn't have to worry about the complexity of calling the constructor, and getting the parameters of the callback right.
+
+Also, it would be kind of nice if you could somehow pass in an object that represented the kind of phone that you want.  And one last thing&mdash;that error string should be wrapped in a JavaScript `Error` object. 
+
+Let's code that up like so:
+
+```JavaScript
+function askMomForPhone(phoneIWant) {
+  return new Promise((resolve, reject) => {
+    // Flip a coin to see what mom decides.
+    const isMomHappy = Math.random() >= 0.5;
+
+    if (isMomHappy) {
+      resolve(phoneIWant);
+    } else {
+      reject(new Error('I blew it.  Sad trombone.  📯 😭'));
+    }
+  });
+}
+```
+
+Cool.  This is looking pretty good.  Wrapping your promise logic in its own function has some key advantages:
+
+- Manage whatever parameters the async opreration needs in one place (in this case, phoneIWant).
+- All the promise logic is enclosed inside its own self-contained scope.
+- We can invoke the asynchronous operation repeatedly in a consistent way.
+- The function can go into a library, or live in its own file.
+
+But the best part is that now you can use `.then()` and `.catch()` to handle the callbacks:
+
+```JavaScript
+const phone = {
+    brand: "Samsung",
+    color: "black"
+};
+
+askMomForPhone(phone)
+  .then((phone) => console.log(`I got a new ${phone.brand} phone!`))
+  .catch((err) => console.error(err));
+```
+
+# Making things truly asynchronous
+
+If you run the code above, you might have noticed that it returns right away.  Even though we're properly creating our `Promise` and we've got our `then` and our `catch` set up correctly, the code does not wait.  It's still technically asynchronous, but there is almost no lag.
+
+The reason for this is because we're not waiting for anything to happen.  The `Promise` constructor invokes your callback immediately, and your callback calls `resolve` or `reject` immediately.
+
+We can fix this by wrapping everything in a call to `setTimeout`.  Let's see how this would look:
+
+```JavaScript
+function askMomForPhone(phoneIWant) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      // Flip a coin to see what mom decides.
+      const isMomHappy = Math.random() >= 0.5;
+
+      if (isMomHappy) {
+        resolve(phoneIWant);
+      } else {
+        reject(new Error('I blew it.  Sad trombone.  📯 😭'));
+      }
+    }, 5000);
+  });
+}
+```
+
+Now our function is truly asynchronous.  
+
+At this point, it might be a good idea to add in some checks before we commit the user to waiting around.  Let's do that next.
+
+# Adding validation checks
+
+A well-written function should have validation checks.  We need to make sure that the data coming in is going to make sense before we send off the request.  So when writing a promised-based function, how do we do validation?
+
+Going back to our example, let's suppose that if Mom is worried about the family budget then she's going to turn you down right away.  She doesn't even have to think about it.  She knows the checking account doesn't have enough money.
+
+On the other hand, if she just got a big bonus, or her tax return came in, or she inherited a pile of cash from a rich uncle, then there's no problem and she'll gladly give you a phone right away.
+
+Validation checks like these can be added at the beginning of the `Promise` constructor's callback function, before making the asynchronous call.  All you have to do is remember to call `resolve` or `reject` before you return.  
+
+Let's add a second parameter, called `familyBudget`, and check it before we call `setTimeout`:
+
+```JavaScript
+function askMomForPhone(phoneIWant, familyBudget) {
+  return new Promise((resolve, reject) => {
+    if (familyBudget < 600) {
+      reject(new Error('Sorry, honey.  We don\'t have the money.'));
+      return;
+    }
+
+    if (familyBudget > 1600) {
+      resolve(phoneIWant);
+      return;    
+    }
+
+    setTimeout(() => {
+      // Flip a coin to see what mom decides.
+      const isMomHappy = Math.random() >= 0.5;
+
+      if (isMomHappy) {
+        resolve(phoneIWant);
+      } else {
+        reject(new Error('I blew it.  Sad trombone.  📯 😭'));
+      }
+    }, 5000);
+  });
+}
+```
+
+Now, if the budget is too low or is above a certain amount then it will return right away:
+
+```JavaScript
+const phone = {
+    brand: "Samsung",
+    color: "black"
+};
+
+askMomForPhone(phone, 1_000_000)
+  .then((phone) => console.log(`Yo, check it! 📳`))
+```
+
+
+# Order of execution
+
+Let's talk about order of execution, because it's important to understand what JavaScript is doing at each step along the way.
+
+Beginning with the code that calls into our function, we initialize our object and then jump into function `askMomForPhone`.  It's important to note that JavaScript doesn't look at the `then` or the `catch` methods yet.
+
+<Image src={ooeStep1} alt="Order of execution" />
+
+The next several steps are tricky to spot and awkward to diagram, because we have two nested functions.  
+
+* The `Promise` constructor's callback.
+* The callback for `setTimeout`.
+
+The first thing that JavaScript does is call the `Promise` constructor, and pass in a reference to our callback.
+
+The constructor then invokes our callback <u>immediately</u>.  It's important to note that there is no waiting here, because JavaScript won't actually pause until it <u>has to</u>.
+
+<Image src={ooeStep2} alt="Order of execution" />
+
+Inside the constructor's callback, the first thing that happens are the two validation checks.  Mom looks at the bank account and makes a quick check to see how much money there is.  If there isn't enough then she says "no", and if there's plenty of money then she says "yes".
+
+Again, both of these happen right away.
+
+<Image src={ooeStep3} alt="Order of execution" />
+
+The next three steps jump around quite a bit.
+
+Step #6 is the part of our example that is truly asynchronous.  We make the call to `setTimeout`, and pass in the timer callback.  Remember that the timer callback doesn't get called until the timer expires&mdash;it gets saved for later.
+
+It's also crucial to remember that at this point, there <u>is still no waiting</u>.  JavaScript still has work to do.  We could do other stuff <u>after</u> the call to `setTimeout` if we needed to, but in this case there is nothing else that needs to be done.
+
+We're now at step #7, and our constructor callback has completed.  Control now returns to the `Promise` constructor, which finishes up anything else that it has to do.
+
+In step #8, we jump to the `return` statement at the top of `askMomForPhone`, where the constructor returns a freshly-minted `Promise` object.
+
+<Image src={ooeStep4} alt="Order of execution" />
+
+Now we're back in the code that started it all.  This is where JavaScript takes our `then` callback and our `catch` callback and stores them for later.
+
+JavaScript then continues running whatever code follows after.  Only when it has no more statements to execute will it finally wait.
+
+<Image src={ooeStep5} alt="Order of execution" />
+
+At this point, JavaScript has stored **three** callbacks, and each one is waiting to do its thing:
+
+1. The callback for `setTimeout`.
+2. The callback for `then`.
+3. The callback for `catch`.
+
+And now we wait.  
+
+JavaScript is twiddling its thumbs in the background, and all is quiet in the browser.
+
+Time marches onward, in its relentless pace.
+
+The earth turns.  The planets move upon their celestial wings.
+
+...and five seconds later, the timeout expires.  JavaScript wakes up and invokes our callback.  We flip our coin, then call `resolve` or `reject`.  JavaScript then invokes the callbacks for `then` or `catch`, whichever one is appropriate.
+
+# Understanding the call stack
+
+It's important to keep in mind what the call stack looks like during the example above, because it's easy to forget where things are at.
+
+Here is how things look while JavaScript is executing the callback for the `Promise` constructor:
+
+1. [your constructor's callback]
+2. [The `Promise` constructor]
+3. Function `askMomForPhone`
+4. [Whatever code called `askMomForPhone`]
+5. [system code]
+
+I put square brackets around the parts where I wasn't sure what the debugger would call it.
+
+The thing to point out here is that everything that happens inside the constructor's callback has a normal call stack.  It's actually safe to throw an exception here because the code that started everything is still there in the background.
+
+But once your code finishes running, all of that ☝☝☝ goes away.
+
+JavaScript is completely idle.  
+
+The only thing happening is the timer in the background, counting down the nanoseconds until it's time to invoke our callback.  Once it fires, your call stack looks <u>very different</u>:
+
+1. [your timer's callback]
+2. [system code]
+
+Notice anything missing?  
+
+Function `askMomForPhone` is not there.  Neither is the code that called function `askMomForPhone`.  
+
+The lesson to learn here is that there is a reason that a promise can <b>never</b> return a value directly to the caller.  Look at this example: 
+
+```JavaScript
+const phone = {
+    brand: "Samsung",
+    color: "black"
+};
+
+const phoneIWant = askMomForPhone(phone)
+  .then((phone) => { 
+    return phone; // 👈 If only it were this easy!!
+  });
+```
+
+The code that invoked your promise has come and gone.  It did its thing, and JavaScript moved on with life (five seconds ago, which is an eternity in CPU-time).
+
+The call stack inside a `then` or a `catch` are also equally as arcane.  They'll both look something like this:
+
+1. [your callback for `then`]
+2. [system code]
+
+Notice that the call frame for your `setTimeout` callback is not there, either.  That code has come and gone, as well.
+
+If none of this makes sense, or you can't see the point of what I'm trying to say, just remember that the reason we can't code imperatively and we have to use callbacks for everything is because JavaScript <b>can not pause and wait</b>.  
+
+It would lock up your browser.
+
+Promises provide JavaScript with an elegant mechanism for managing asynchronous tasks, and it comes at the cost of using callbacks.
+
+# Antipatterns
+
+Ok, so now that I've told you how to create your own `Promise` from scratch, you should never use this pattern&mdash;unless you know why this pattern is used.
+
+Calling `new Promise` is extremely low-level, and is not for everyday use.  99% of the time I see someone using `new Promise`, they're doing it for the wrong reason.
+
+I've seen this sort of thing 👇 far too often.  I've even seen senior devs do this:
+
+```JavaScript
+function fetchMyData() {
+  return new Promise((resolve, reject) => {
+    fetch('https://api.somewhere.com/my/data')
+      .then(response => response.data)
+      .then(data => resolve(data)) // 👈 WTAF!! 😡💢
+      .catch(err => reject(err)); // 👈 No ... just stop.
+  })
+}
+```
+
+Will this code run?  Absolutely.
+
+Why is it bad?  Because `fetch` already returns a promise.  They're literally wrapping a promise inside another promise.
+
+# When should you use the `Promise` constructor?
+
+You use the `Promise` constructor when you have a function that:
+
+1. Does <u>not</u> already return a `Promise`.   This is where you need to go read the documentation.
+2. <u>Does</u> perform some long-running task that would otherwise cause JavaScript to block.
+3. <u>Does</u> provide a callback for when the operation has completed.
+
+Let's look at an example:
+
+```JavaScript
+setTimeout(
+  () => alert('Time is up!'),
+  5000
+);
+```
+
+Ahh, the humble `setTimeout` function.  
+
+Let me just say that this guy is a ripe candidate for being made into a version that returns a `Promise`.  Let's do that right now.  We'll name our new function `sleep`.
+
+```JavaScript
+function sleep(msTime) {
+  return new Promise(resolve => setTimeout(resolve, msTime));
+}
+```
+
+Ok, now we have a wrapper for `setTimeout` that returns a promise.  We can call it like any other function that returns a `Promise`.
+
+```JavaScript
+sleep(5000)
+  .then(_ => alert('Time is up!'));
+```
+
+Kind of cool, eh?
+
+But wait, there's more!
+
+# Using `async` and `await`
+
+So, how would we write our `askMomForPhone` function using `async` and `await`?
+
+If you recall, the `async` keyword tells JavaScript to wrap anything that your function returns into a `Promise`.  This means that no matter what you do, your function will always return a `Promise`.
+
+So with that in mind you might be asking yourself, if your `askMomForPhone` already returns a promise why does it need to be made async?  
+
+And the answer is that it doesn't.
+
+That said, you can make your code a little bit more readable at the very beginning.  At this point, it's not about improving performance.  It's about simplicity, and making our function async will make things just a touch more readable.
+
+
+(sleep example)
+
+(conclusion) give the basic pattern
+* structure of the Promise ctor's callback
+* always call resolve/reject.  If you try to return a value, your promise WILL hang forever.
+* wrap it in a function, so it's encapsulated, and the user doesn't have to fuss over the details of low-level code.

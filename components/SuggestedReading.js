@@ -19,6 +19,7 @@ export default function SuggestedReading({ maxCount = 5 }) {
 
   const suggestedPosts = posts
     .filter((post) => post.slug !== frontmatter?.slug)
+    .filter((post) => post.isPublished)
     .filter((_, index) => index < maxCount);
 
   return (
