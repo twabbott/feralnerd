@@ -342,7 +342,7 @@ The earth turns.  The planets move upon their celestial wings.
 
 It's important to keep in mind what the call stack looks like during the example above, because it's easy to forget where things are at.
 
-Here is how things look while JavaScript is executing the callback for the `Promise` constructor:
+If you were to set a breakpoint inside the callback for the `Promise` constructor, here is roughly what you would see:
 
 1. [your constructor's callback]
 2. [The `Promise` constructor]
@@ -350,15 +350,13 @@ Here is how things look while JavaScript is executing the callback for the `Prom
 4. [Whatever code called `askMomForPhone`]
 5. [system code]
 
-I put square brackets around the parts where I wasn't sure what the debugger would call it.
+I put square brackets around the parts where I wasn't sure what the debugger would call it, but this illustration is good enough.
 
 The thing to point out here is that everything that happens inside the constructor's callback has a normal call stack.  It's actually safe to throw an exception here because the code that started everything is still there in the background.
 
 But once your code finishes running, all of that ☝☝☝ goes away.
 
-JavaScript is completely idle.  
-
-The only thing happening is the timer in the background, counting down the nanoseconds until it's time to invoke our callback.  Once it fires, your call stack looks <u>very different</u>:
+Once your code finishes running, JavaScript becomes completely idle.  The only thing happening is the timer in the background, counting down the nanoseconds until it's time to invoke our callback.  Once it fires, your call stack looks <u>very different</u>:
 
 1. [your timer's callback]
 2. [system code]
@@ -367,34 +365,22 @@ Notice anything missing?
 
 Function `askMomForPhone` is not there.  Neither is the code that called function `askMomForPhone`.  
 
-The lesson to learn here is that there is a reason that a promise can <b>never</b> return a value directly to the caller.  Look at this example: 
-
-```JavaScript
-const phone = {
-    brand: "Samsung",
-    color: "black"
-};
-
-const phoneIWant = askMomForPhone(phone)
-  .then((phone) => { 
-    return phone; // 👈 If only it were this easy!!
-  });
-```
-
-The code that invoked your promise has come and gone.  It did its thing, and JavaScript moved on with life (five seconds ago, which is an eternity in CPU-time).
+The lesson to learn here is that there is a reason that a promise can <b>never</b> return a value directly to the caller.  Your callbacks are invoked by the system, so there is no caller to return a value to.
 
 The call stack inside a `then` or a `catch` are also equally as arcane.  They'll both look something like this:
 
 1. [your callback for `then`]
 2. [system code]
 
-Notice that the call frame for your `setTimeout` callback is not there, either.  That code has come and gone, as well.
+Notice that the call frame for your `setTimeout` callback is not there, either.  Again, that code has come and gone.
 
 If none of this makes sense, or you can't see the point of what I'm trying to say, just remember that the reason we can't code imperatively and we have to use callbacks for everything is because JavaScript <b>can not pause and wait</b>.  
 
 It would lock up your browser.
 
 Promises provide JavaScript with an elegant mechanism for managing asynchronous tasks, and it comes at the cost of using callbacks.
+
+NOTE: You might be thinking, "But wait, what about `async` and `await`??"  We'll talk about that in a second.
 
 # Antipatterns
 
@@ -459,20 +445,93 @@ But wait, there's more!
 
 # Using `async` and `await`
 
+This post wouldn't be complete without a mention of `async` and `await`, and how we could improve this example using the latest enhancements to JavaScript.
+
+To do a quick review of these two keywords:
+
+* `async` is added in front of a funciton definition to tell JavaScript that this function <u>must always</u> return a `Promise`.
+* `await` un-boxes a promise and allows you to program imperatively with promises, instead of using callbacks.
+
 So, how would we write our `askMomForPhone` function using `async` and `await`?
 
-If you recall, the `async` keyword tells JavaScript to wrap anything that your function returns into a `Promise`.  This means that no matter what you do, your function will always return a `Promise`.
+For starters, you might be asking yourself that since `askMomForPhone` already returns a promise, why does it need to be made async?  
 
-So with that in mind you might be asking yourself, if your `askMomForPhone` already returns a promise why does it need to be made async?  
+Well ... to be honest, it doesn't.
 
-And the answer is that it doesn't.
+This function is well-written, as-is.  There are no performance improvements or other enhancements that you absolutely need.
 
-That said, you can make your code a little bit more readable at the very beginning.  At this point, it's not about improving performance.  It's about simplicity, and making our function async will make things just a touch more readable.
+That said, you certainly can make things a little bit more readable.  If we convert `askMomForPhone` to be `async`, we can move the validation logic outside of the `Promise` constructor's callback function.  Because the function is `async` we can now throw an exception if the budget is too tight, or return a phone object right away if the budget has plenty of room:
 
+```JavaScript
+async function askMomForPhone(phoneIWant, familyBudget) {
+  if (familyBudget < 600) {
+    throw new Error('Sorry, honey.  We don\'t have the money.');
+  }
 
-(sleep example)
+  if (familyBudget > 1600) {
+    return phoneIWant;
+  }
 
-(conclusion) give the basic pattern
-* structure of the Promise ctor's callback
-* always call resolve/reject.  If you try to return a value, your promise WILL hang forever.
-* wrap it in a function, so it's encapsulated, and the user doesn't have to fuss over the details of low-level code.
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      // Flip a coin to see what mom decides.
+      const isMomHappy = Math.random() >= 0.5;
+
+      if (isMomHappy) {
+        resolve(phoneIWant);
+      } else {
+        reject(new Error('I blew it.  Sad trombone.  📯 😭'));
+      }
+    }, 5000);
+  });
+}
+```
+
+This is looking pretty good.  If we want to use the `sleep` function that we defined earlier, we can make things even simpler.
+
+Check this out:
+
+```JavaScript
+async function askMomForPhone(phoneIWant, familyBudget) {
+  if (familyBudget < 600) {
+    throw new Error('Sorry, honey.  We don\'t have the money.');
+  }
+
+  if (familyBudget > 1600) {
+    return phoneIWant;
+  }
+
+  await sleep(5000);
+
+  // Flip a coin to see what mom decides.
+  const isMomHappy = Math.random() >= 0.5;
+
+  if (isMomHappy) {
+    return phoneIWant;
+  } else {
+    throw new Error('I blew it.  Sad trombone.  📯 😭');
+  }
+}
+```
+
+Man, this is so cool.  
+
+JavaScript is still using promises under the hood, but now we have the ability to work with promises imperatively, using a coding style that is so much more readable.
+
+Calling our function can be made simpler as well&mdash;especially now  with the latest updates from ES2022, which allows us to use the `await` operator without having to wrap it in an async IIFE (which has always been a superb eye-sore, in my opinion).
+
+Behold:
+
+```JavaScript
+const phone = {
+    brand: "Samsung",
+    color: "black"
+};
+
+try {
+  const phone = await askMomForPhone(phone)
+  console.log(`I got a new ${phone.brand} phone!`);
+} catch (err) {
+  console.error(err);
+}
+```
