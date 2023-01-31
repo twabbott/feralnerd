@@ -4,7 +4,7 @@
       "filename": "./2023-01/creating-a-new-promise/index.mdx",
       "link": "/posts/2023-01/creating-a-new-promise",
       "slug": "creating-a-new-promise",
-      "readingTime": 6,
+      "readingTime": 11,
       "isPublished": true,
       "title": "Creating a New Promise",
       "date": "2023-01-22",
@@ -29,26 +29,6 @@
       "title": "Understanding Promises in JavaScript",
       "date": "2023-01-14",
       "excerpt": "Let's talk about JavaScript promises.  We're going to do a deep dive using a very basic examples that build upon one and other, and explain how the system behaves.  Then we'll follow up with a real-world example using a public REST API.  By the end of this post you should have a solid understanding of the core concepts.",
-      "image": {
-        "src": "/_next/static/media/hero.14c95aec.jpg",
-        "height": 1080,
-        "width": 1920,
-        "blurDataURL": "/_next/image?url=%2F_next%2Fstatic%2Fmedia%2Fhero.14c95aec.jpg&w=8&q=70",
-        "blurWidth": 8,
-        "blurHeight": 5
-      },
-      "imageAlt": "Hero image",
-      "imageCredit": "Photo by <a href=\"https://unsplash.com/@cytonn_photography?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Cytonn Photography</a> on <a href=\"https://unsplash.com/photos/vWchRczcQwM?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Unsplash</a>"
-    },
-    {
-      "filename": "./2023-01/understanding-javascript-promises/asynchronous-functions.mdx",
-      "link": "/posts/2023-01/understanding-javascript-promises/asynchronous-functions.mdx",
-      "slug": "asynchronous-functions.mdx",
-      "readingTime": 3,
-      "isPublished": false,
-      "title": "Understanding Promises in JavaScript",
-      "date": "2023-01-14",
-      "excerpt": "Let's talk about promises and how they work.  We're going to do a deep dive using a very basic example with pictures.",
       "image": {
         "src": "/_next/static/media/hero.14c95aec.jpg",
         "height": 1080,
